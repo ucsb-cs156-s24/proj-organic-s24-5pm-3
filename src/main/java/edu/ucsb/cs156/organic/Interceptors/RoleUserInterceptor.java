@@ -25,6 +25,8 @@ import java.util.Optional;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Collection;
+import java.util.Enumeration;
+
 import edu.ucsb.cs156.organic.entities.User;
 
 
@@ -44,6 +46,19 @@ public class RoleUserInterceptor implements HandlerInterceptor {
         Authentication authentication = securityContext.getAuthentication();
         log.warn("\u001B[33m" + "RoleUserInterceptor: preHandle" + "\u001B[0m");
         log.warn(request.getScheme());
+        // Print header
+        log.warn("\u001B[33m" + "With Headers" + "\u001B[0m");
+        Enumeration<String> headerNames = request.getHeaderNames();
+
+        // Print all headers and their values
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            Enumeration<String> headers = request.getHeaders(headerName);
+            while (headers.hasMoreElements()) {
+                String headerValue = headers.nextElement();
+                log.info(headerName+": "+headerValue);
+            }
+        }
         
 
         if (authentication instanceof OAuth2AuthenticationToken ) {
