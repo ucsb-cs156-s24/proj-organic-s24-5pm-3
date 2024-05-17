@@ -9,6 +9,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.ucsb.cs156.organic.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +28,7 @@ import java.util.Collection;
 import edu.ucsb.cs156.organic.entities.User;
 
 
-
+@Slf4j
 @Component
 public class RoleUserInterceptor implements HandlerInterceptor {
 
@@ -40,7 +42,8 @@ public class RoleUserInterceptor implements HandlerInterceptor {
         // Otherwise interceptor will remove ROLE_ADMIN before the incoming request is processed by backend API
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
-
+        log.warn("\u001B[33m" + "RoleUserInterceptor: preHandle" + "\u001B[0m");
+        log.warn(request.getScheme());
         
 
         if (authentication instanceof OAuth2AuthenticationToken ) {
