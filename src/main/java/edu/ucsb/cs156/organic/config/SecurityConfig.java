@@ -119,14 +119,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return result;
   }
 
-  @Bean
-	FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
+  // @Bean
+	// FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
 		
-	    final FilterRegistrationBean<ForwardedHeaderFilter> filterRegistrationBean = new FilterRegistrationBean<ForwardedHeaderFilter>();
+	//     final FilterRegistrationBean<ForwardedHeaderFilter> filterRegistrationBean = new FilterRegistrationBean<ForwardedHeaderFilter>();
 	    
-	    filterRegistrationBean.setFilter(new ForwardedHeaderFilter());
-	    filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+	//     filterRegistrationBean.setFilter(new ForwardedHeaderFilter());
+	//     filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 	    
-	    return filterRegistrationBean;
-	}
+	//     return filterRegistrationBean;
+	// }
 }
