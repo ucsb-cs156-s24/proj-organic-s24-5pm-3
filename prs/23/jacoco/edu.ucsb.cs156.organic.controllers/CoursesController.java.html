@@ -133,8 +133,8 @@ import java.util.Optional;
 <span class="fc" id="L133">            Optional&lt;Staff&gt; s = courseStaffRepository.findByCourseIdAndGithubId(id, u.getGithubId());</span>
 <span class="fc bfc" id="L134" title="All 2 branches covered.">            if (s.isEmpty()) {</span>
 <span class="fc" id="L135">                throw new AccessDeniedException(</span>
-<span class="fc" id="L136">                    String.format(&quot;User %s is not authorized to get course %d&quot;,</span>
-<span class="fc" id="L137">                            u.getGithubLogin(), id));</span>
+<span class="fc" id="L136">                        String.format(&quot;User %s is not authorized to get course %d&quot;,</span>
+<span class="fc" id="L137">                                u.getGithubLogin(), id));</span>
             }
         }
 <span class="fc" id="L140">        String githubOrg = course.getGithubOrg();</span>
@@ -334,23 +334,23 @@ import java.util.Optional;
             throws JsonProcessingException {
         Course targetCourse;
 
-        try {
-<span class="fc" id="L338">            targetCourse = courseRepository.findById(courseId)</span>
-<span class="fc" id="L339">                    .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, courseId));</span>
-<span class="fc" id="L340">        } catch (Exception e) {</span>
+<span class="fc" id="L337">        Optional&lt;Course&gt; tempCourse = courseRepository.findById(courseId);</span>
+<span class="fc bfc" id="L338" title="All 2 branches covered.">        if (tempCourse.isPresent()) {</span>
+<span class="fc" id="L339">            targetCourse = tempCourse.get();</span>
+        } else {
 <span class="fc" id="L341">            return &quot;Course not found&quot;;</span>
-<span class="fc" id="L342">        }</span>
+        }
 <span class="fc" id="L343">        User u = getCurrentUser().getUser();</span>
 
 <span class="fc" id="L345">        log.warn(&quot;\u001B[33mUSER JOINING THE COURSE\u001B[0m&quot;);</span>
 <span class="fc" id="L346">        log.warn(&quot;\u001B[33m&quot; + u.getGithubLogin() + &quot;\u001B[0m&quot;);</span>
         School s;
-        try {
-<span class="fc" id="L349">            s = schoolRepository.findByName(targetCourse.getSchool())</span>
-<span class="fc" id="L350">                    .orElseThrow(() -&gt; new EntityNotFoundException(School.class, targetCourse.getSchool()));</span>
-<span class="fc" id="L351">        } catch (Exception e) {</span>
+<span class="fc" id="L348">        Optional&lt;School&gt; tempSchool = schoolRepository.findByName(targetCourse.getSchool());</span>
+<span class="fc bfc" id="L349" title="All 2 branches covered.">        if (tempSchool.isPresent()) {</span>
+<span class="fc" id="L350">            s = tempSchool.get();</span>
+        } else {
 <span class="fc" id="L352">            return &quot;School not found&quot;;</span>
-<span class="fc" id="L353">        }</span>
+        }
 
 <span class="fc" id="L355">        String emailSufix = s.getAbbrev() + &quot;.edu&quot;;</span>
 
