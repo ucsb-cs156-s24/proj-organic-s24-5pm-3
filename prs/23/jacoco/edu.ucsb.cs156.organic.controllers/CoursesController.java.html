@@ -386,8 +386,8 @@ import java.util.Optional;
         // Check roster here
 
         // Send org Invitation
-<span class="fc" id="L389">        GitHubAppOrg org = gitHubApp.org(targetCourse.getGithubOrg());</span>
         try {
+<span class="fc" id="L390">            GitHubAppOrg org = gitHubApp.org(targetCourse.getGithubOrg());</span>
 <span class="fc" id="L391">            String res = org.inviteUserToThisOrg(u.getGithubId());</span>
 <span class="fc" id="L392">            log.info(&quot;\u001B[33m&quot; + res + &quot;\u001B[0m&quot;);</span>
 <span class="fc" id="L393">        } catch (Exception e) {</span>
