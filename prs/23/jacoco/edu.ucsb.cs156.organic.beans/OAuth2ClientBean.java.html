@@ -10,32 +10,54 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.web.context.annotation.RequestScope;
 
 import com.tianleyu.github.GitHubToken;
+import com.tianleyu.github.GitHubUserApi;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
-<span class="fc" id="L17">@Slf4j</span>
-<span class="fc" id="L18">public class OAuth2ClientBean {</span>
+<span class="fc" id="L18">@Slf4j</span>
+<span class="fc" id="L19">public class OAuth2ClientBean {</span>
 
     @Bean
     @RequestScope
     public GitHubToken accessToken(OAuth2AuthorizedClientService clientService) {
-<span class="nc" id="L23">        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();</span>
-<span class="nc" id="L24">        String accessToken = null;</span>
-<span class="nc bnc" id="L25" title="All 2 branches missed.">        if (authentication.getClass().isAssignableFrom(OAuth2AuthenticationToken.class)) {</span>
-<span class="nc" id="L26">            OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;</span>
-<span class="nc" id="L27">            String clientRegistrationId = oauthToken.getAuthorizedClientRegistrationId();</span>
-<span class="nc" id="L28">            log.error(clientRegistrationId);</span>
-<span class="nc" id="L29">            log.error(oauthToken.getName());</span>
-<span class="nc bnc" id="L30" title="All 2 branches missed.">            if (clientRegistrationId.equals(&quot;github&quot;)) {</span>
-<span class="nc" id="L31">                OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(clientRegistrationId,</span>
-<span class="nc" id="L32">                        oauthToken.getName());</span>
-<span class="nc" id="L33">                accessToken = client.getAccessToken().getTokenValue();</span>
+<span class="nc" id="L24">        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc" id="L25">        String accessToken = null;</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (authentication.getClass().isAssignableFrom(OAuth2AuthenticationToken.class)) {</span>
+<span class="nc" id="L27">            OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;</span>
+<span class="nc" id="L28">            String clientRegistrationId = oauthToken.getAuthorizedClientRegistrationId();</span>
+<span class="nc" id="L29">            log.error(clientRegistrationId);</span>
+<span class="nc" id="L30">            log.error(oauthToken.getName());</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">            if (clientRegistrationId.equals(&quot;github&quot;)) {</span>
+<span class="nc" id="L32">                OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(clientRegistrationId,</span>
+<span class="nc" id="L33">                        oauthToken.getName());</span>
+<span class="nc" id="L34">                accessToken = client.getAccessToken().getTokenValue();</span>
 
-<span class="nc" id="L35">                log.error(accessToken);</span>
+<span class="nc" id="L36">                log.error(accessToken);</span>
             }
         }
-<span class="nc" id="L38">        return new GitHubToken(accessToken);</span>
+<span class="nc" id="L39">        return new GitHubToken(accessToken);</span>
+    }
+
+    @Bean
+    @RequestScope
+    public GitHubUserApi getUserApi(OAuth2AuthorizedClientService clientService) {
+<span class="nc" id="L45">        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc" id="L46">        String accessToken = null;</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (authentication.getClass().isAssignableFrom(OAuth2AuthenticationToken.class)) {</span>
+<span class="nc" id="L48">            OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;</span>
+<span class="nc" id="L49">            String clientRegistrationId = oauthToken.getAuthorizedClientRegistrationId();</span>
+<span class="nc" id="L50">            log.error(clientRegistrationId);</span>
+<span class="nc" id="L51">            log.error(oauthToken.getName());</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (clientRegistrationId.equals(&quot;github&quot;)) {</span>
+<span class="nc" id="L53">                OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(clientRegistrationId,</span>
+<span class="nc" id="L54">                        oauthToken.getName());</span>
+<span class="nc" id="L55">                accessToken = client.getAccessToken().getTokenValue();</span>
+
+<span class="nc" id="L57">                log.error(accessToken);</span>
+            }
+        }
+<span class="nc" id="L60">        return new GitHubUserApi(accessToken);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
