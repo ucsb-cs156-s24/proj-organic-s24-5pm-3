@@ -66,15 +66,21 @@ function CoursesForm({ initialContents, submitAction, buttonLabel = "Create" }) 
 
             <Row>
                 <Col>
-                    <Form.Group className="mb-3" >
+                    <Form.Group className="mb-3">
                         <Form.Label htmlFor="school">School</Form.Label>
-                        <Form.Control
+                        <Form.Select
+                            key={new Date().getTime()} //https://stackoverflow.com/questions/60446256/how-do-i-get-my-dropdown-in-react-to-update-without-having-to-refresh
                             data-testid="CoursesForm-school"
                             id="school"
                             type="text"
                             isInvalid={Boolean(errors.school)}
                             {...register("school", { required: true })}
-                        />
+                            >
+                            <option value=""></option>
+                            <option value="UC Santa Barbara">UC Santa Barbara</option>
+                            <option value="University of Minnesota">University of Minnesota</option>
+                            <option value="UC San Diego">UC San Diego</option>
+                        </Form.Select>
                         <Form.Control.Feedback type="invalid">
                             {errors.school && 'School is required. '}
                         </Form.Control.Feedback>
