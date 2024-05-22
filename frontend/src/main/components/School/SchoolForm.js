@@ -40,6 +40,27 @@ function SchoolForm({ initialContents, submitAction, buttonLabel = "Create" }) {
                     </Form.Group>
                 </Col>
                 <Col>
+                    <Form.Group className="mb-3">
+                        <Form.Label htmlFor="name">Name</Form.Label>
+                        <Form.Select
+                            key={new Date().getTime()} //https://stackoverflow.com/questions/60446256/how-do-i-get-my-dropdown-in-react-to-update-without-having-to-refresh
+                            data-testid="SchoolForm-name"
+                            id="name"
+                            type="text"
+                            isInvalid={Boolean(errors.done)}
+                            {...register("name", { required: true })}
+                            >
+                            <option value=""></option>
+                            <option value="UC Santa Barbara">UC Santa Barbara</option>
+                            <option value="University of Minnesota">University of Minnesota</option>
+                            <option value="UC San Diego">UC San Diego</option>
+                        </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.name && 'Name is required. '}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+                {/* <Col>
                     <Form.Group className="mb-3" >
                         <Form.Label htmlFor="name">Name</Form.Label>
                         <Form.Control
@@ -53,7 +74,7 @@ function SchoolForm({ initialContents, submitAction, buttonLabel = "Create" }) {
                             {errors.name && 'Name is required. '}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Col>
+                </Col> */}
                 <Col>
                     <Form.Group className="mb-3" >
                         <Form.Label htmlFor="termRegex">Term Regex</Form.Label>
