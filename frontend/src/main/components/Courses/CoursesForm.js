@@ -77,7 +77,7 @@ function CoursesForm({ initialContents, submitAction, buttonLabel = "Create" }) 
                             {...register("school", { required: true })}
                             >
                             <option value=""></option>
-                            <option value="UC Santa Barbara">UC Santa Barbara</option>
+                            <option value="UCSB">UC Santa Barbara</option>
                             <option value="University of Minnesota">University of Minnesota</option>
                             <option value="UC San Diego">UC San Diego</option>
                         </Form.Select>
@@ -86,6 +86,21 @@ function CoursesForm({ initialContents, submitAction, buttonLabel = "Create" }) 
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
+                {/* <Col>
+                    <Form.Group className="mb-3" >
+                        <Form.Label htmlFor="school">Schools</Form.Label>
+                        <Form.Control
+                            data-testid="CoursesForm-school"
+                            id="school"
+                            type="text"
+                            isInvalid={Boolean(errors.school)}
+                            {...register("school", { required: true })}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.school && 'School is required. '}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col> */}
                 <Col>
                     <Form.Group className="mb-3" >
                         <Form.Label htmlFor="term">Term</Form.Label>
