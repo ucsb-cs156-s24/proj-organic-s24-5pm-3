@@ -2,7 +2,9 @@ import { Button, Form, Row, Col } from 'react-bootstrap';
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { enableEndDateValidation } from './dateValidation'; // Import the JavaScript file
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+
+// import React, { useState, useEffect } from 'react';
 
 function CoursesForm({ initialContents, submitAction, buttonLabel = "Create" }) {
     useEffect(() => {
@@ -23,6 +25,14 @@ function CoursesForm({ initialContents, submitAction, buttonLabel = "Create" }) 
     
     // Stryker disable next-line Regex
     const isodate_regex = /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d)/i;
+
+    const [schools, setSchools] = useState([]); 
+
+    useEffect(() => {
+        fetch('/api/schools/all')
+            .then(response => response.json())
+            .then(data => setSchools(data));
+    }, []);
     
     return (
 
@@ -65,7 +75,7 @@ function CoursesForm({ initialContents, submitAction, buttonLabel = "Create" }) 
             </Row>
 
             <Row>
-                <Col>
+                {/* <Col>
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="school">School</Form.Label>
                         <Form.Select
@@ -85,7 +95,7 @@ function CoursesForm({ initialContents, submitAction, buttonLabel = "Create" }) 
                             {errors.school && 'School is required. '}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Col>
+                </Col> */}
                 {/* <Col>
                     <Form.Group className="mb-3" >
                         <Form.Label htmlFor="school">Schools</Form.Label>
@@ -101,6 +111,24 @@ function CoursesForm({ initialContents, submitAction, buttonLabel = "Create" }) 
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col> */}
+                <Col>
+                    <Form.Group className="mb-3" controlId="school">
+                        <Form.Label htmlFor="school">Schools</Form.Label>
+                            <Form.Control 
+                                as="select" 
+                                data-testid="CoursesForm-school"
+                                id="school"
+                                type="text"
+                                isInvalid={Boolean(errors.school)}{...register("school", { required: true })}>
+                                    {schools.map((school) => (
+                                        <option value={school.id}>{school.name}</option>
+                                    ))}
+                            </Form.Control>
+                            <Form.Control.Feedback type="invalid">
+                                {errors.school && 'School is required. '}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
                 <Col>
                     <Form.Group className="mb-3" >
                         <Form.Label htmlFor="term">Term</Form.Label>

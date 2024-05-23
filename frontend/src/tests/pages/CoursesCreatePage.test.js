@@ -88,7 +88,7 @@ describe("CourseCreatePage tests", () => {
         const submitButton = screen.getByTestId("CoursesForm-submit");
 
         fireEvent.change(nameField, { target: { value: 'CS156' } });
-        fireEvent.change(schoolField, { target: { value: 'UCSB' } });
+        fireEvent.change(schoolField, { target: { value: "Test" } });
         fireEvent.change(termField, { target: { value: 'F23' } });
         fireEvent.change(startDateField, { target: { value: '2023-09-24T12:00:00' } });
         fireEvent.change(endDateField, { target: { value: '2023-12-15T12:00:00' } });

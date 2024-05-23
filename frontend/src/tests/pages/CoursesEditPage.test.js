@@ -2,6 +2,9 @@ import { fireEvent, render, waitFor, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import CoursesEditPage from "main/pages/CoursesEditPage";
+
+import SchoolForm from "main/components/School/SchoolForm";
+
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 import axios from "axios";
@@ -96,6 +99,13 @@ describe("CoursesEditPage tests", () => {
                 endDate: "2023-03-12T00:00",
                 githubOrg: "ucsb-cs156-w23"
             });
+            axiosMock.onGet('/api/schools/get').reply(200, {
+                "abbrev": "ucsb",
+                "name": "UCSB",
+                "termRegex": "f22",
+                "termDescription": "f22",
+                "termError": "no"
+            });
         });
 
         const queryClient = new QueryClient();
@@ -123,7 +133,8 @@ describe("CoursesEditPage tests", () => {
 
             const idField = screen.getByTestId("CoursesForm-id");
             const nameField = screen.getByTestId("CoursesForm-name");
-            const schoolField = screen.getByTestId("CoursesForm-school");
+            // const schoolField = screen.getByTestId("CoursesForm-name");
+            const schoolSchoolField = screen.getByTestId("SchoolForm-name");
             const termField = screen.getByTestId("CoursesForm-term");
             const startField = screen.getByTestId("CoursesForm-startDate");
             const endField = screen.getByTestId("CoursesForm-endDate");
@@ -132,7 +143,7 @@ describe("CoursesEditPage tests", () => {
 
             expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("CS 156");
-            expect(schoolField).toHaveValue("UCSB");
+            expect(schoolSchoolField).toHaveValue("UCSB");
             expect(termField).toHaveValue("f23");
             expect(startField).toHaveValue("2023-09-29T00:00");
             expect(endField).toHaveValue("2023-12-15T00:00");
@@ -154,7 +165,8 @@ describe("CoursesEditPage tests", () => {
 
             const idField = screen.getByTestId("CoursesForm-id");
             const nameField = screen.getByTestId("CoursesForm-name");
-            const schoolField = screen.getByTestId("CoursesForm-school");
+            // const schoolField = screen.getByTestId("CoursesForm-school");
+            const schoolSchoolField = screen.getByTestId("SchoolForm-name");
             const termField = screen.getByTestId("CoursesForm-term");
             const startField = screen.getByTestId("CoursesForm-startDate");
             const endField = screen.getByTestId("CoursesForm-endDate");
@@ -163,7 +175,7 @@ describe("CoursesEditPage tests", () => {
 
             expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("CS 156");
-            expect(schoolField).toHaveValue("UCSB");
+            expect(schoolSchoolField).toHaveValue("UCSB");
             expect(termField).toHaveValue("f23");
             expect(startField).toHaveValue("2023-09-29T00:00");
             expect(endField).toHaveValue("2023-12-15T00:00");
@@ -171,7 +183,7 @@ describe("CoursesEditPage tests", () => {
             expect(submitButton).toBeInTheDocument();
 
             fireEvent.change(nameField, { target: { value: "CS 148" } })
-            fireEvent.change(schoolField, { target: { value: "UCSB" } })
+            fireEvent.change(schoolSchoolField, { target: { value: "ucsb" } })
             fireEvent.change(termField, { target: { value: "w23" } })
             fireEvent.change(startField, { target: { value: "2024-01-10T00:00" } })
             fireEvent.change(endField, { target: { value: "2023-03-12T00:00" } })
@@ -191,4 +203,3 @@ describe("CoursesEditPage tests", () => {
        
     });
 });
-

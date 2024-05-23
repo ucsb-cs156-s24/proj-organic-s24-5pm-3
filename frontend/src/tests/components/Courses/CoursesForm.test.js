@@ -4,6 +4,9 @@ import { coursesFixtures } from "fixtures/coursesFixtures";
 import { BrowserRouter as Router } from "react-router-dom";
 import { enableEndDateValidation } from "main/components/Courses/dateValidation"; // Import the function to test
 
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+
 const mockedNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
@@ -34,6 +37,16 @@ describe("CoursesForm tests", () => {
         await screen.findByText(/Name/);
         await screen.findByText(/Create/);
     });
+
+    const server = setupServer(
+        rest.get('/api/schools/all', (req, res, ctx) => {
+          return res(ctx.json([{ id: 1, name: 'UCSB' }]));
+        }),
+      );
+      
+      beforeAll(() => server.listen());
+      afterEach(() => server.resetHandlers());
+      afterAll(() => server.close());
 
 
     test("renders correctly when passing in a Courses", async () => {
