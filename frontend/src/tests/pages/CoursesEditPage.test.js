@@ -84,7 +84,7 @@ describe("CoursesEditPage tests", () => {
             axiosMock.onGet("/api/courses/get", { params: { id: 17 } }).reply(200, {
                 id: 17,
                 name: "CS 156",
-                school: "UCSB",
+                school: axiosMock.onGet("/api/schools").reply(200, SchoolForm.name),
                 term: "f23",
                 startDate: "2023-09-29T00:00",
                 endDate: "2023-12-15T00:00",
@@ -98,13 +98,6 @@ describe("CoursesEditPage tests", () => {
                 startDate: "2024-01-10T00:00",
                 endDate: "2023-03-12T00:00",
                 githubOrg: "ucsb-cs156-w23"
-            });
-            axiosMock.onGet('/api/schools/get').reply(200, {
-                "abbrev": "ucsb",
-                "name": "UCSB",
-                "termRegex": "f22",
-                "termDescription": "f22",
-                "termError": "no"
             });
         });
 
@@ -133,8 +126,7 @@ describe("CoursesEditPage tests", () => {
 
             const idField = screen.getByTestId("CoursesForm-id");
             const nameField = screen.getByTestId("CoursesForm-name");
-            // const schoolField = screen.getByTestId("CoursesForm-name");
-            const schoolSchoolField = screen.getByTestId("SchoolForm-name");
+            const schoolField = screen.getByTestId("CoursesForm-school");
             const termField = screen.getByTestId("CoursesForm-term");
             const startField = screen.getByTestId("CoursesForm-startDate");
             const endField = screen.getByTestId("CoursesForm-endDate");
@@ -143,7 +135,7 @@ describe("CoursesEditPage tests", () => {
 
             expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("CS 156");
-            expect(schoolSchoolField).toHaveValue("UCSB");
+            expect(schoolField).toHaveValue("UCSB");
             expect(termField).toHaveValue("f23");
             expect(startField).toHaveValue("2023-09-29T00:00");
             expect(endField).toHaveValue("2023-12-15T00:00");
@@ -165,8 +157,7 @@ describe("CoursesEditPage tests", () => {
 
             const idField = screen.getByTestId("CoursesForm-id");
             const nameField = screen.getByTestId("CoursesForm-name");
-            // const schoolField = screen.getByTestId("CoursesForm-school");
-            const schoolSchoolField = screen.getByTestId("SchoolForm-name");
+            const schoolField = screen.getByTestId("CoursesForm-school");
             const termField = screen.getByTestId("CoursesForm-term");
             const startField = screen.getByTestId("CoursesForm-startDate");
             const endField = screen.getByTestId("CoursesForm-endDate");
@@ -175,7 +166,7 @@ describe("CoursesEditPage tests", () => {
 
             expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("CS 156");
-            expect(schoolSchoolField).toHaveValue("UCSB");
+            expect(schoolField).toHaveValue("UCSB");
             expect(termField).toHaveValue("f23");
             expect(startField).toHaveValue("2023-09-29T00:00");
             expect(endField).toHaveValue("2023-12-15T00:00");

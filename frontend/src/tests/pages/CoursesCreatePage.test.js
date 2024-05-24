@@ -2,6 +2,8 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import CoursesCreatePage from "main/pages/CoursesCreatePage";
+import SchoolForm from "main/components/School/SchoolForm";
+
 
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
@@ -103,7 +105,7 @@ describe("CourseCreatePage tests", () => {
         expect(axiosMock.history.post[0].params).toEqual(
             {
                 "name": "CS156",
-                "school": "UCSB",
+                "school": axiosMock.onGet("/api/schools").reply(200, SchoolForm.name),
                 "term": "F23",
                 "startDate": "2023-09-24T12:00",
                 "endDate": "2023-12-15T12:00",
