@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from "react";
 
 import { useBackendMutation } from "main/utils/useBackend";
 import HomePage from "main/pages/HomePage";
@@ -12,6 +12,7 @@ import CoursesEditPage from "main/pages/CoursesEditPage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
 import AdminJobsPage from "main/pages/AdminJobsPage";
 import SchoolIndexPage from "main/pages/SchoolIndexPage";
+import SchoolCreatePage from "main/pages/SchoolCreatePage";
 
 import CoursesCreatePage from "main/pages/CoursesCreatePage";
 import CourseIndexPage from "main/pages/CourseIndexPage";
@@ -25,6 +26,7 @@ function App() {
   const adminRoutes = hasRole(currentUser, "ROLE_ADMIN") ? (
     <>
       <Route path="/admin/schools" element={<SchoolIndexPage />} />
+      <Route path="/admin/schools/create" element={<SchoolCreatePage />} />
       <Route path="/admin/users" element={<AdminUsersPage />} />
       <Route path="/admin/jobs" element={<AdminJobsPage />} />
     </>
@@ -37,23 +39,28 @@ function App() {
     </>
   ) : null;
 
-  const courseRoutes = (hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_INSTRUCTOR")) ? (
-    <>
-      <Route path="/courses/create" element={<CoursesCreatePage />} />
-      <Route path="/courses" element={<CourseIndexPage />} />
-      <Route path="/courses/edit/:id" element={<CoursesEditPage />} />
-    </>
-  ) : null;
+  const courseRoutes =
+    hasRole(currentUser, "ROLE_ADMIN") ||
+    hasRole(currentUser, "ROLE_INSTRUCTOR") ? (
+      <>
+        <Route path="/courses/create" element={<CoursesCreatePage />} />
+        <Route path="/courses" element={<CourseIndexPage />} />
+        <Route path="/courses/edit/:id" element={<CoursesEditPage />} />
+      </>
+    ) : null;
 
-  const homeRoute = (hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_USER")) 
-    ? <Route path="/" element={<HomePage />} /> 
-    : <Route path="/" element={<LoginPage />} />;
+  const homeRoute =
+    hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_USER") ? (
+      <Route path="/" element={<HomePage />} />
+    ) : (
+      <Route path="/" element={<LoginPage />} />
+    );
 
   /*  Display the LoadingPage while awaiting currentUser 
       response to prevent the NotFoundPage from displaying */
-      
+
   const updateLastOnlineMutation = useBackendMutation(
-    () => ({ method: 'POST', url: '/api/currentUser/last-online' }),
+    () => ({ method: "POST", url: "/api/currentUser/last-online" }),
     {}
   );
 
@@ -65,7 +72,7 @@ function App() {
         updatedOnlineOnMount.current = true;
         updateLastOnlineMutation.mutate();
       }
-      
+
       const interval = setInterval(() => {
         updateLastOnlineMutation.mutate();
       }, 60000);
@@ -78,7 +85,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      {currentUser?.initialData ? ( <LoadingPage /> ) : ( 
+      {currentUser?.initialData ? (
+        <LoadingPage />
+      ) : (
         <Routes>
           {homeRoute}
           {adminRoutes}

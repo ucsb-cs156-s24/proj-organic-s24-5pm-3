@@ -3,15 +3,16 @@ import SchoolForm from "main/components/School/SchoolForm";
 import { Navigate } from "react-router-dom";
 import { useBackendMutation } from "main/utils/useBackend";
 import { toast } from "react-toastify";
-import { useCurrentUser } from "main/utils/currentUser";
 
 export default function SchoolCreatePage({ storybook = false }) {
-  const { data: currentUser } = useCurrentUser();
   const objectToAxiosParams = (school) => ({
     url: "/api/schools/post",
     method: "POST",
-    params: {
-      abrev: school.abrev,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      abbrev: school.abbrev,
       name: school.name,
       termRegex: school.termRegex,
       termDescription: school.termDescription,
@@ -20,32 +21,50 @@ export default function SchoolCreatePage({ storybook = false }) {
   });
 
   const onSuccess = (school) => {
-    toast(`New School Created - abrev: ${school.abrev} name: ${school.name}`);
+    toast(`New School Created - abbrev: ${school.abbrev} name: ${school.name}`);
+  };
+
+  const onError = (error) => {
+    if (error.response) {
+      console.error("Error data:", error.response.data);
+      console.error("Error status:", error.response.status);
+      console.error("Error headers:", error.response.headers);
+      toast.error(`Error: ${error.response.data}`);
+    } else if (error.request) {
+      console.error("Error request:", error.request);
+      toast.error("No response received from server.");
+    } else {
+      console.error("Error message:", error.message);
+      toast.error(`Error: ${error.message}`);
+    }
+    console.error("Error config:", error.config);
   };
 
   const mutation = useBackendMutation(
     objectToAxiosParams,
-    { onSuccess },
-    // Stryker disable next-line all : hard to set up test for caching
+    { onSuccess, onError },
     ["/api/schools/all"]
   );
 
   const { isSuccess } = mutation;
 
   const onSubmit = async (data) => {
-    mutation.mutate(data);
+    try {
+      await mutation.mutateAsync(data);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error(`Submission error: ${error.message}`);
+    }
   };
 
-  if (isSuccess) {
-    //if (isSuccess && !storybook) {
-    return <Navigate to="/schools" />;
+  if (isSuccess && !storybook) {
+    return <Navigate to="/admin/schools" />;
   }
 
   return (
     <BasicLayout>
       <div className="pt-2">
         <h1>Create New School</h1>
-
         <SchoolForm submitAction={onSubmit} />
       </div>
     </BasicLayout>
