@@ -74,7 +74,7 @@ public abstract class ApiController {
 <span class="fc" id="L74">        mapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector() {</span>
             @Override
             public boolean hasIgnoreMarker(final AnnotatedMember m) {
-<span class="pc bpc" id="L77" title="1 of 4 branches missed.">                return super.hasIgnoreMarker(m) || m.getName().contains(&quot;Mockito&quot;);</span>
+<span class="fc" id="L77">                return super.hasIgnoreMarker(m); //|| m.getName().contains(&quot;Mockito&quot;);</span>
             }
         });
 <span class="fc" id="L80">        return mapper;</span>
