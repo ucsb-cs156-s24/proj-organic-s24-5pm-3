@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubAppOrg.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">organic</a> &gt; <a href="index.source.html" class="el_package">edu.ucsb.cs156.github</a> &gt; <span class="el_source">GitHubAppOrg.java</span></div><h1>GitHubAppOrg.java</h1><pre class="source lang-java linenums">package edu.ucsb.cs156.github;
+
+import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import org.json.*;
+
+public class GitHubAppOrg {
+    public String orgId;
+    private GitHubApp app;
+    private String instId;
+    private String accessToken;
+    private LocalDate accessTokenExpiration;
+
+    private HttpClient client;
+
+<span class="fc" id="L19">    public GitHubAppOrg(GitHubApp app, String org, String instId) {</span>
+<span class="fc" id="L20">        this.orgId = org;</span>
+<span class="fc" id="L21">        this.app = app;</span>
+<span class="fc" id="L22">        this.instId = instId;</span>
+<span class="fc" id="L23">        client = HttpClient.newHttpClient();</span>
+<span class="fc" id="L24">        getInstallationAccessToken();</span>
+<span class="fc" id="L25">    }</span>
+
+    private void getInstallationAccessToken() {
+<span class="fc" id="L28">        String resp = app.post(&quot;/app/installations/&quot; + instId + &quot;/access_tokens&quot;, &quot;{}&quot;).body();</span>
+<span class="fc" id="L29">        JSONObject json = new JSONObject(resp);</span>
+<span class="fc" id="L30">        this.accessToken = json.getString(&quot;token&quot;);</span>
+<span class="fc" id="L31">        this.accessTokenExpiration = LocalDate.parse(json.getString(&quot;expires_at&quot;), DateTimeFormatter.ISO_DATE_TIME);</span>
+<span class="fc" id="L32">    }</span>
+
+    private void checkAccessTokenExpiration() {
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (LocalDate.now().isAfter(accessTokenExpiration))</span>
+<span class="fc" id="L36">            getInstallationAccessToken();</span>
+<span class="fc" id="L37">    }</span>
+
+    public HttpResponse&lt;String&gt; get(String url)
+            throws GitHubAppException {
+<span class="fc" id="L41">        checkAccessTokenExpiration();</span>
+<span class="fc" id="L42">        return Utils.get(url, accessToken, client);</span>
+    }
+
+    public HttpResponse&lt;String&gt; post(String url, JSONObject body)
+            throws GitHubAppException {
+<span class="fc" id="L47">        checkAccessTokenExpiration();</span>
+<span class="fc" id="L48">        return Utils.post(url, body.toString(), accessToken, client);</span>
+
+    }
+
+    public HttpResponse&lt;String&gt; post(String url, String body)
+            throws GitHubAppException {
+<span class="fc" id="L54">        checkAccessTokenExpiration();</span>
+<span class="fc" id="L55">        return Utils.post(url, body, accessToken, client);</span>
+    }
+
+    // Begin actual biz code
+
+    public String inviteUserToThisOrg(Integer userId) {
+<span class="fc" id="L61">        JSONObject body = new JSONObject();</span>
+<span class="fc" id="L62">        body.put(&quot;invitee_id&quot;, userId);</span>
+<span class="fc" id="L63">        HttpResponse&lt;String&gt; resp = post(&quot;/orgs/&quot; + orgId + &quot;/invitations&quot;, body);</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (resp.statusCode() != 201) {</span>
+<span class="fc" id="L65">            throw new GitHubAppException(&quot;Failed to invite user to org: &quot; + resp.body());</span>
+        }
+<span class="fc" id="L67">        return resp.body();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
