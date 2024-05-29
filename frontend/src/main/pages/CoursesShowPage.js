@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useParams } from "react-router-dom";
 import { useBackend } from 'main/utils/useBackend';
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
@@ -26,6 +26,8 @@ export default function CourseShowPage() {
         <div className="pt-2">
           <h1>Course {id} Info</h1>
           <CoursesTable courses={[courses]} currentUser={currentUser} />
+
+          <h2>Upload a course roster</h2>
         </div>
       </BasicLayout>
     )
