@@ -399,8 +399,8 @@ import java.util.Optional;
 <span class="fc" id="L399">        Student stu = studentRepository.findByCourseIdAndEmail(courseId, schoolEmail)</span>
 <span class="fc" id="L400">                .orElse(null);</span>
 
-<span class="pc bpc" id="L402" title="1 of 2 branches missed.">        if (stu == null) {</span>
-<span class="nc" id="L403">            throw new AccessDeniedException(&quot;User is not in the roster&quot;);</span>
+<span class="fc bfc" id="L402" title="All 2 branches covered.">        if (stu == null) {</span>
+<span class="fc" id="L403">            throw new AccessDeniedException(&quot;User is not in the roster&quot;);</span>
         }
 
 <span class="fc bfc" id="L406" title="All 4 branches covered.">        if(stu.getGithubId() != null &amp;&amp; stu.getGithubId() != 0) {</span>
