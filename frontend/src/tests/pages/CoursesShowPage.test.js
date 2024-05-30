@@ -8,6 +8,9 @@ import CoursesShowPage from "main/pages/CoursesShowPage";
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 
+
+
+
 import mockConsole from "jest-mock-console";
 
 const mockToast = jest.fn();
@@ -116,4 +119,32 @@ describe("CoursesShowPage tests", () => {
     });
 
   });
+
+
+    describe("CoursesShowPage File Upload Tests", () => {
+
+        test("renders with data", async () => {
+            const axiosMock = new AxiosMockAdapter(axios);
+
+            beforeEach(() => {
+                axiosMock.reset();
+                axiosMock.resetHistory();
+                axiosMock.onGet("/api/courses/1").reply(200, systemInfoFixtures.showingNeither);
+            });
+
+            const queryClient = new QueryClient();
+            render(
+                <QueryClientProvider client={queryClient}>
+                    <MemoryRouter>
+                        <CoursesShowPage />
+                    </MemoryRouter>
+                </QueryClientProvider>
+            );
+            const uploadFile = await screen.findByTestId("inputFile");
+        });
+    });
+
+
+
 });
+
