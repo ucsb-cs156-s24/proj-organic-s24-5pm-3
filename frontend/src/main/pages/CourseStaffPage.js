@@ -7,7 +7,7 @@ import StaffTable from "main/components/Staff/StaffTable";
 export default function CoursesStaffPage() {
   let { id } = useParams();
 
-  const { data: staff, _error, _status } =
+  const { data: staff, _error, status } =
       useBackend(
           [`/api/courses/getStaff?courseId=${id}`],
           {
@@ -18,6 +18,17 @@ export default function CoursesStaffPage() {
               }
           }
       );
+
+      if (status === 'loading') {
+        return (
+          <BasicLayout>
+            <div className="pt-2">
+              <h1>Loading...</h1>
+            </div>
+          </BasicLayout>
+        );
+      }
+    
 
       return (
         <BasicLayout>

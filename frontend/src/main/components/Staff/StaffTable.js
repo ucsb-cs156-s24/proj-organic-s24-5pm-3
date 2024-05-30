@@ -16,8 +16,8 @@ import OurTable from "main/components/OurTable"
              accessor: 'courseId',
          },
          {
-             Header: 'githubId',
-             accessor: 'githubId',
+             Header: 'githubLogin',
+             accessor: 'githubLogin',
          },
    
      ];
