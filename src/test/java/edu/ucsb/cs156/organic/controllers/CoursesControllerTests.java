@@ -1220,8 +1220,17 @@ public class CoursesControllerTests extends ControllerTestCase {
         Student student = Student.builder().courseId(course1.getId()).studentId("user").email("user@ucsb.edu")
                 .githubId(currentUser.getGithubId()).build();
 
-        Student student1 = Student.builder().courseId(course1.getId()).studentId("user").email("user@ucsb.edu")
-                .githubId(0).build();
+        Student student1 = Student
+        // student1.setGithubId(0);
+        // student1.setCourseId(course1.getId());
+        // student1.setEmail("user@ucsb.edu");
+        // student1.setStudentId("user");
+        .builder().courseId(course1.getId()).studentId("user").email("user@ucsb.edu")
+               .githubId(0).build();
+        //  when(student1.getGithubId()).thenReturn(0);
+        //  when(student1.getCourseId()).thenReturn(course1.getId());
+        //  when(student1.getEmail()).thenReturn("user@ucsb.edu");
+        //  when(student1.getStudentId()).thenReturn("user");
 
         GitHubApp stub = mock(GitHubApp.class);
         GitHubAppOrg s = mock(GitHubAppOrg.class);
@@ -1243,6 +1252,9 @@ public class CoursesControllerTests extends ControllerTestCase {
 
         verify(courseRepository, times(1)).findById(eq(1L));
         verify(studentRepository, times(1)).save(any(Student.class));
+        // verify(student1, times(1)).setGithubId(eq(currentUser.getGithubId()));
+        assertEquals(currentUser.getGithubId(), student1.getGithubId());
+        assertEquals(currentUser.getGithubId(), student1.getUser().getGithubId());
         String expectedJson = mapper.writeValueAsString(
                 GeneralOperationResp.builder().success(true).message("Joined Successfully").build());
         String responseString = response.getResponse().getContentAsString();
