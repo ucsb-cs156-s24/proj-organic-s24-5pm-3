@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from "react";
 
 import { useBackendMutation } from "main/utils/useBackend";
 import HomePage from "main/pages/HomePage";
@@ -15,6 +15,7 @@ import SchoolIndexPage from "main/pages/SchoolIndexPage";
 
 import CoursesCreatePage from "main/pages/CoursesCreatePage";
 import CourseIndexPage from "main/pages/CourseIndexPage";
+import CourseStaffPage from "main/pages/CourseStaffPage";
 
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
 import NotFoundPage from "main/pages/NotFoundPage";
@@ -34,26 +35,32 @@ function App() {
     <>
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/courses" element={<CourseIndexPage />} />
+      <Route path="/courses/:id/staff" element={<CourseStaffPage />} />
     </>
   ) : null;
 
-  const courseRoutes = (hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_INSTRUCTOR")) ? (
-    <>
-      <Route path="/courses/create" element={<CoursesCreatePage />} />
-      <Route path="/courses" element={<CourseIndexPage />} />
-      <Route path="/courses/edit/:id" element={<CoursesEditPage />} />
-    </>
-  ) : null;
+  const courseRoutes =
+    hasRole(currentUser, "ROLE_ADMIN") ||
+    hasRole(currentUser, "ROLE_INSTRUCTOR") ? (
+      <>
+        <Route path="/courses/create" element={<CoursesCreatePage />} />
+        <Route path="/courses" element={<CourseIndexPage />} />
+        <Route path="/courses/edit/:id" element={<CoursesEditPage />} />
+      </>
+    ) : null;
 
-  const homeRoute = (hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_USER")) 
-    ? <Route path="/" element={<HomePage />} /> 
-    : <Route path="/" element={<LoginPage />} />;
+  const homeRoute =
+    hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_USER") ? (
+      <Route path="/" element={<HomePage />} />
+    ) : (
+      <Route path="/" element={<LoginPage />} />
+    );
 
   /*  Display the LoadingPage while awaiting currentUser 
       response to prevent the NotFoundPage from displaying */
-      
+
   const updateLastOnlineMutation = useBackendMutation(
-    () => ({ method: 'POST', url: '/api/currentUser/last-online' }),
+    () => ({ method: "POST", url: "/api/currentUser/last-online" }),
     {}
   );
 
@@ -65,7 +72,7 @@ function App() {
         updatedOnlineOnMount.current = true;
         updateLastOnlineMutation.mutate();
       }
-      
+
       const interval = setInterval(() => {
         updateLastOnlineMutation.mutate();
       }, 60000);
@@ -78,7 +85,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      {currentUser?.initialData ? ( <LoadingPage /> ) : ( 
+      {currentUser?.initialData ? (
+        <LoadingPage />
+      ) : (
         <Routes>
           {homeRoute}
           {adminRoutes}
