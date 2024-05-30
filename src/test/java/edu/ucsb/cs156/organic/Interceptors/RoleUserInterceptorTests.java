@@ -1,5 +1,5 @@
 
-package edu.ucsb.cs156.organic.Interceptors;
+package edu.ucsb.cs156.organic.interceptors;
 
 
 
@@ -11,12 +11,12 @@ import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.security.core.context.SecurityContext;
-import  org.springframework.security.core.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import edu.ucsb.cs156.organic.entities.User;
-import edu.ucsb.cs156.organic.Interceptors.RoleUserInterceptor;
+import edu.ucsb.cs156.organic.interceptors.RoleUserInterceptor;
 import edu.ucsb.cs156.organic.controllers.ControllerTestCase;
 import edu.ucsb.cs156.organic.repositories.UserRepository;
 import org.springframework.boot.test.context.SpringBootTest;

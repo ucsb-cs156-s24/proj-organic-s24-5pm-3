@@ -1,4 +1,4 @@
-package edu.ucsb.cs156.organic.Interceptors;
+package edu.ucsb.cs156.organic.interceptors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,5 +15,5 @@ public class RoleUserInterceptorAppConfig implements WebMvcConfigurer {
    public void addInterceptors(InterceptorRegistry registry) {
       registry.addInterceptor(roleUserInterceptor);
    }
-   
+
 }
