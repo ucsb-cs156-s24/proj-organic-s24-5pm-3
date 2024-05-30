@@ -403,7 +403,7 @@ import java.util.Optional;
 <span class="nc" id="L403">            throw new AccessDeniedException(&quot;User is not in the roster&quot;);</span>
         }
 
-<span class="pc bpc" id="L406" title="1 of 4 branches missed.">        if(stu.getGithubId() != null &amp;&amp; stu.getGithubId() != 0) {</span>
+<span class="fc bfc" id="L406" title="All 4 branches covered.">        if(stu.getGithubId() != null &amp;&amp; stu.getGithubId() != 0) {</span>
 <span class="fc" id="L407">            throw new AccessDeniedException(&quot;User is already in the org&quot;);</span>
         }
         // Check roster here
