@@ -12,7 +12,6 @@ import edu.ucsb.cs156.organic.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import liquibase.pro.packaged.gh;
 import lombok.extern.slf4j.Slf4j;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -48,7 +47,7 @@ import org.kohsuke.github.GitHub;
 
 import java.time.LocalDateTime;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import javax.validation.Valid;
 
 import java.util.ArrayList;
@@ -57,8 +56,8 @@ import java.util.Optional;
 @Tag(name = &quot;Courses&quot;)
 @RequestMapping(&quot;/api/courses&quot;)
 @RestController
-<span class="fc" id="L60">@Slf4j</span>
-<span class="fc" id="L61">public class CoursesController extends ApiController {</span>
+<span class="fc" id="L59">@Slf4j</span>
+<span class="fc" id="L60">public class CoursesController extends ApiController {</span>
 
     @Autowired
     CourseRepository courseRepository;
@@ -88,17 +87,17 @@ import java.util.Optional;
     @PreAuthorize(&quot;hasAnyRole('ROLE_USER', 'ROLE_ADMIN')&quot;)
     @GetMapping(&quot;/all&quot;)
     public Iterable&lt;Course&gt; allCourses() {
-<span class="fc" id="L91">        User u = getCurrentUser().getUser();</span>
-<span class="fc" id="L92">        log.info(&quot;u={}&quot;, u);</span>
+<span class="fc" id="L90">        User u = getCurrentUser().getUser();</span>
+<span class="fc" id="L91">        log.info(&quot;u={}&quot;, u);</span>
         // This is how you use it
         // log.warn(&quot;\u001B[33mTOKENTOTOKEN &quot; + accessToken.getToken() + &quot;\u001B[0m&quot;);
         // log.warn(&quot;\u001B[33mGetting User Emails\u001B[0m&quot;);
         // GitHubUserApi ghUser = new GitHubUserApi(accessToken);
         // log.warn(&quot;\u001B[33m&quot;+ghUser.userEmails().toString()+&quot;\u001B[0m&quot;);
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (u.isAdmin()) {</span>
-<span class="fc" id="L99">            return courseRepository.findAll();</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (u.isAdmin()) {</span>
+<span class="fc" id="L98">            return courseRepository.findAll();</span>
         } else {
-<span class="fc" id="L101">            return courseRepository.findCoursesStaffedByUser(u.getGithubId());</span>
+<span class="fc" id="L100">            return courseRepository.findCoursesStaffedByUser(u.getGithubId());</span>
         }
     }
 
@@ -107,18 +106,18 @@ import java.util.Optional;
     @GetMapping(&quot;/get&quot;)
     public Course getById(
             @Parameter(name = &quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L110">        User u = getCurrentUser().getUser();</span>
+<span class="fc" id="L109">        User u = getCurrentUser().getUser();</span>
 
-<span class="fc" id="L112">        Course course = courseRepository.findById(id)</span>
-<span class="fc" id="L113">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id));</span>
+<span class="fc" id="L111">        Course course = courseRepository.findById(id)</span>
+<span class="fc" id="L112">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id));</span>
 
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (!u.isAdmin()) {</span>
-<span class="fc" id="L116">            courseStaffRepository.findByCourseIdAndGithubId(id, u.getGithubId())</span>
-<span class="fc" id="L117">                    .orElseThrow(() -&gt; new AccessDeniedException(</span>
-<span class="fc" id="L118">                            String.format(&quot;User %s is not authorized to get course %d&quot;,</span>
-<span class="fc" id="L119">                                    u.getGithubLogin(), id)));</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (!u.isAdmin()) {</span>
+<span class="fc" id="L115">            courseStaffRepository.findByCourseIdAndGithubId(id, u.getGithubId())</span>
+<span class="fc" id="L116">                    .orElseThrow(() -&gt; new AccessDeniedException(</span>
+<span class="fc" id="L117">                            String.format(&quot;User %s is not authorized to get course %d&quot;,</span>
+<span class="fc" id="L118">                                    u.getGithubLogin(), id)));</span>
         }
-<span class="fc" id="L121">        return course;</span>
+<span class="fc" id="L120">        return course;</span>
     }
 
     @Operation(summary = &quot;Get GitHub App status&quot;)
@@ -126,40 +125,40 @@ import java.util.Optional;
     @GetMapping(&quot;/github&quot;)
     public OrgStatus getGithubOrgById(
             @Parameter(name = &quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L129">        User u = getCurrentUser().getUser();</span>
+<span class="fc" id="L128">        User u = getCurrentUser().getUser();</span>
 
-<span class="fc" id="L131">        Course course = courseRepository.findById(id)</span>
-<span class="fc" id="L132">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id));</span>
+<span class="fc" id="L130">        Course course = courseRepository.findById(id)</span>
+<span class="fc" id="L131">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id));</span>
 
-<span class="fc bfc" id="L134" title="All 2 branches covered.">        if (!u.isAdmin()) {</span>
-<span class="fc" id="L135">            Optional&lt;Staff&gt; s = courseStaffRepository.findByCourseIdAndGithubId(id, u.getGithubId());</span>
-<span class="fc bfc" id="L136" title="All 2 branches covered.">            if (s.isEmpty()) {</span>
-<span class="fc" id="L137">                throw new AccessDeniedException(</span>
-<span class="fc" id="L138">                        String.format(&quot;User %s is not authorized to get course %d&quot;,</span>
-<span class="fc" id="L139">                                u.getGithubLogin(), id));</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        if (!u.isAdmin()) {</span>
+<span class="fc" id="L134">            Optional&lt;Staff&gt; s = courseStaffRepository.findByCourseIdAndGithubId(id, u.getGithubId());</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">            if (s.isEmpty()) {</span>
+<span class="fc" id="L136">                throw new AccessDeniedException(</span>
+<span class="fc" id="L137">                        String.format(&quot;User %s is not authorized to get course %d&quot;,</span>
+<span class="fc" id="L138">                                u.getGithubLogin(), id));</span>
             }
         }
-<span class="fc" id="L142">        JSONObject appInfo = gitHubApp.appInfo();</span>
-<span class="fc" id="L143">        String githubOrg = course.getGithubOrg();</span>
-<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (course.getGithubAppInstallationId() == 0) {</span>
+<span class="fc" id="L141">        JSONObject appInfo = gitHubApp.appInfo();</span>
+<span class="fc" id="L142">        String githubOrg = course.getGithubOrg();</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (course.getGithubAppInstallationId() == 0) {</span>
             try {
-<span class="fc" id="L146">                GitHubAppOrg org = gitHubApp.org(githubOrg);</span>
-<span class="fc" id="L147">                course.setGithubAppInstallationId(Long.parseLong(org.instId));</span>
-<span class="fc" id="L148">                courseRepository.save(course);</span>
-<span class="fc" id="L149">            } catch (Exception e) {</span>
-<span class="fc" id="L150">                log.error(&quot;CAUGHT EXCEPTION \u001b[31m&quot; + e.toString() + &quot;\u001b[0m&quot;);</span>
-<span class="fc" id="L151">                return OrgStatus.builder()</span>
-<span class="fc" id="L152">                        .org(githubOrg)</span>
-<span class="fc" id="L153">                        .githubAppInstalled(false)</span>
-<span class="fc" id="L154">                        .name(appInfo.getString(&quot;slug&quot;))</span>
-<span class="fc" id="L155">                        .build();</span>
-<span class="fc" id="L156">            }</span>
+<span class="fc" id="L145">                GitHubAppOrg org = gitHubApp.org(githubOrg);</span>
+<span class="fc" id="L146">                course.setGithubAppInstallationId(Long.parseLong(org.instId));</span>
+<span class="fc" id="L147">                courseRepository.save(course);</span>
+<span class="fc" id="L148">            } catch (Exception e) {</span>
+<span class="fc" id="L149">                log.error(&quot;CAUGHT EXCEPTION \u001b[31m&quot; + e.toString() + &quot;\u001b[0m&quot;);</span>
+<span class="fc" id="L150">                return OrgStatus.builder()</span>
+<span class="fc" id="L151">                        .org(githubOrg)</span>
+<span class="fc" id="L152">                        .githubAppInstalled(false)</span>
+<span class="fc" id="L153">                        .name(appInfo.getString(&quot;slug&quot;))</span>
+<span class="fc" id="L154">                        .build();</span>
+<span class="fc" id="L155">            }</span>
         }
-<span class="fc" id="L158">        return OrgStatus.builder()</span>
-<span class="fc" id="L159">                .org(githubOrg)</span>
-<span class="fc" id="L160">                .githubAppInstalled(true)</span>
-<span class="fc" id="L161">                .name(appInfo.getString(&quot;slug&quot;))</span>
-<span class="fc" id="L162">                .build();</span>
+<span class="fc" id="L157">        return OrgStatus.builder()</span>
+<span class="fc" id="L158">                .org(githubOrg)</span>
+<span class="fc" id="L159">                .githubAppInstalled(true)</span>
+<span class="fc" id="L160">                .name(appInfo.getString(&quot;slug&quot;))</span>
+<span class="fc" id="L161">                .build();</span>
     }
 
     @Operation(summary = &quot;Create a new course&quot;)
@@ -174,34 +173,34 @@ import java.util.Optional;
             @Parameter(name = &quot;githubOrg&quot;, description = &quot;for example ucsb-cs156-f23&quot;) @RequestParam String githubOrg)
             throws JsonProcessingException {
 
-<span class="fc" id="L177">        Course course = Course.builder()</span>
-<span class="fc" id="L178">                .name(name)</span>
-<span class="fc" id="L179">                .school(school)</span>
-<span class="fc" id="L180">                .term(term)</span>
-<span class="fc" id="L181">                .startDate(startDate)</span>
-<span class="fc" id="L182">                .endDate(endDate)</span>
-<span class="fc" id="L183">                .githubOrg(githubOrg)</span>
-<span class="fc" id="L184">                .githubAppInstallationId(0)</span>
-<span class="fc" id="L185">                .build();</span>
+<span class="fc" id="L176">        Course course = Course.builder()</span>
+<span class="fc" id="L177">                .name(name)</span>
+<span class="fc" id="L178">                .school(school)</span>
+<span class="fc" id="L179">                .term(term)</span>
+<span class="fc" id="L180">                .startDate(startDate)</span>
+<span class="fc" id="L181">                .endDate(endDate)</span>
+<span class="fc" id="L182">                .githubOrg(githubOrg)</span>
+<span class="fc" id="L183">                .githubAppInstallationId(0)</span>
+<span class="fc" id="L184">                .build();</span>
         try {
-<span class="fc" id="L187">            GitHubAppOrg org = gitHubApp.org(githubOrg);</span>
-<span class="fc" id="L188">            course.setGithubAppInstallationId(Long.parseLong(org.instId));</span>
-<span class="fc" id="L189">        } catch (Exception e) {</span>
+<span class="fc" id="L186">            GitHubAppOrg org = gitHubApp.org(githubOrg);</span>
+<span class="fc" id="L187">            course.setGithubAppInstallationId(Long.parseLong(org.instId));</span>
+<span class="fc" id="L188">        } catch (Exception e) {</span>
             // Github App not installed
-<span class="fc" id="L191">        }</span>
+<span class="fc" id="L190">        }</span>
 
-<span class="fc" id="L193">        Course savedCourse = courseRepository.save(course);</span>
-<span class="fc" id="L194">        User u = getCurrentUser().getUser();</span>
+<span class="fc" id="L192">        Course savedCourse = courseRepository.save(course);</span>
+<span class="fc" id="L193">        User u = getCurrentUser().getUser();</span>
 
-<span class="fc" id="L196">        Staff courseStaff = Staff.builder()</span>
-<span class="fc" id="L197">                .courseId(savedCourse.getId())</span>
-<span class="fc" id="L198">                .githubId(u.getGithubId())</span>
-<span class="fc" id="L199">                .build();</span>
+<span class="fc" id="L195">        Staff courseStaff = Staff.builder()</span>
+<span class="fc" id="L196">                .courseId(savedCourse.getId())</span>
+<span class="fc" id="L197">                .githubId(u.getGithubId())</span>
+<span class="fc" id="L198">                .build();</span>
 
-<span class="fc" id="L201">        log.info(&quot;courseStaff={}&quot;, courseStaff);</span>
-<span class="fc" id="L202">        courseStaffRepository.save(courseStaff);</span>
+<span class="fc" id="L200">        log.info(&quot;courseStaff={}&quot;, courseStaff);</span>
+<span class="fc" id="L201">        courseStaffRepository.save(courseStaff);</span>
 
-<span class="fc" id="L204">        return savedCourse;</span>
+<span class="fc" id="L203">        return savedCourse;</span>
     }
 
     @Operation(summary = &quot;Add a staff member to a course&quot;)
@@ -212,22 +211,22 @@ import java.util.Optional;
             @Parameter(name = &quot;githubLogin&quot;) @RequestParam String githubLogin)
             throws JsonProcessingException {
 
-<span class="fc" id="L215">        Course course = courseRepository.findById(courseId)</span>
-<span class="fc" id="L216">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, courseId.toString()));</span>
+<span class="fc" id="L214">        Course course = courseRepository.findById(courseId)</span>
+<span class="fc" id="L215">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, courseId.toString()));</span>
 
-<span class="fc" id="L218">        User user = userRepository.findByGithubLogin(githubLogin)</span>
-<span class="fc" id="L219">                .orElseThrow(() -&gt; new EntityNotFoundException(User.class, githubLogin.toString()));</span>
+<span class="fc" id="L217">        User user = userRepository.findByGithubLogin(githubLogin)</span>
+<span class="fc" id="L218">                .orElseThrow(() -&gt; new EntityNotFoundException(User.class, githubLogin.toString()));</span>
 
-<span class="fc" id="L221">        Staff courseStaff = Staff.builder()</span>
-<span class="fc" id="L222">                .courseId(course.getId())</span>
-<span class="fc" id="L223">                .githubId(user.getGithubId())</span>
-<span class="fc" id="L224">                .user(user)</span>
-<span class="fc" id="L225">                .build();</span>
+<span class="fc" id="L220">        Staff courseStaff = Staff.builder()</span>
+<span class="fc" id="L221">                .courseId(course.getId())</span>
+<span class="fc" id="L222">                .githubId(user.getGithubId())</span>
+<span class="fc" id="L223">                .user(user)</span>
+<span class="fc" id="L224">                .build();</span>
 
-<span class="fc" id="L227">        courseStaff = courseStaffRepository.save(courseStaff);</span>
-<span class="fc" id="L228">        log.info(&quot;courseStaff={}&quot;, courseStaff);</span>
+<span class="fc" id="L226">        courseStaff = courseStaffRepository.save(courseStaff);</span>
+<span class="fc" id="L227">        log.info(&quot;courseStaff={}&quot;, courseStaff);</span>
 
-<span class="fc" id="L230">        return courseStaff;</span>
+<span class="fc" id="L229">        return courseStaff;</span>
     }
 
     @Operation(summary = &quot;Get Staff for course&quot;)
@@ -237,11 +236,11 @@ import java.util.Optional;
             @Parameter(name = &quot;courseId&quot;) @RequestParam Long courseId)
             throws JsonProcessingException {
 
-<span class="fc" id="L240">        Course course = courseRepository.findById(courseId)</span>
-<span class="fc" id="L241">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, courseId.toString()));</span>
+<span class="fc" id="L239">        Course course = courseRepository.findById(courseId)</span>
+<span class="fc" id="L240">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, courseId.toString()));</span>
 
-<span class="fc" id="L243">        Iterable&lt;Staff&gt; courseStaff = courseStaffRepository.findByCourseId(course.getId());</span>
-<span class="fc" id="L244">        return courseStaff;</span>
+<span class="fc" id="L242">        Iterable&lt;Staff&gt; courseStaff = courseStaffRepository.findByCourseId(course.getId());</span>
+<span class="fc" id="L243">        return courseStaff;</span>
     }
 
     @Operation(summary = &quot;Delete a Course Staff by id&quot;)
@@ -249,11 +248,11 @@ import java.util.Optional;
     @DeleteMapping(&quot;/staff&quot;)
     public Object deleteStaff(
             @Parameter(name = &quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L252">        Staff staff = courseStaffRepository.findById(id)</span>
-<span class="fc" id="L253">                .orElseThrow(() -&gt; new EntityNotFoundException(Staff.class, id.toString()));</span>
+<span class="fc" id="L251">        Staff staff = courseStaffRepository.findById(id)</span>
+<span class="fc" id="L252">                .orElseThrow(() -&gt; new EntityNotFoundException(Staff.class, id.toString()));</span>
 
-<span class="fc" id="L255">        courseStaffRepository.delete(staff);</span>
-<span class="fc" id="L256">        return genericMessage(&quot;Staff with id %s is deleted&quot;.formatted(id));</span>
+<span class="fc" id="L254">        courseStaffRepository.delete(staff);</span>
+<span class="fc" id="L255">        return genericMessage(&quot;Staff with id %s is deleted&quot;.formatted(id));</span>
     }
 
     @Operation(summary = &quot;Update information for a course&quot;)
@@ -271,37 +270,37 @@ import java.util.Optional;
             @Parameter(name = &quot;githubOrg&quot;, description = &quot;for example ucsb-cs156-f23&quot;) @RequestParam String githubOrg)
             throws JsonProcessingException {
 
-<span class="fc" id="L274">        Course course = courseRepository.findById(id)</span>
-<span class="fc" id="L275">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id.toString()));</span>
+<span class="fc" id="L273">        Course course = courseRepository.findById(id)</span>
+<span class="fc" id="L274">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id.toString()));</span>
 
         // Check if the current user is a staff member for this course or an admin. If
         // not, throw AccessDeniedException
 
-<span class="fc" id="L280">        User u = getCurrentUser().getUser();</span>
-<span class="fc bfc" id="L281" title="All 2 branches covered.">        if (!u.isAdmin()) {</span>
-<span class="fc" id="L282">            courseStaffRepository.findByCourseIdAndGithubId(course.getId(), u.getGithubId())</span>
-<span class="fc" id="L283">                    .orElseThrow(() -&gt; new AccessDeniedException(</span>
+<span class="fc" id="L279">        User u = getCurrentUser().getUser();</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">        if (!u.isAdmin()) {</span>
+<span class="fc" id="L281">            courseStaffRepository.findByCourseIdAndGithubId(course.getId(), u.getGithubId())</span>
+<span class="fc" id="L282">                    .orElseThrow(() -&gt; new AccessDeniedException(</span>
                             &quot;User is not a staff member for this course&quot;));
         }
 
-<span class="fc" id="L287">        course.setName(name);</span>
-<span class="fc" id="L288">        course.setSchool(school);</span>
-<span class="fc" id="L289">        course.setTerm(term);</span>
-<span class="fc" id="L290">        course.setStartDate(startDate);</span>
-<span class="fc" id="L291">        course.setEndDate(endDate);</span>
-<span class="fc" id="L292">        course.setGithubOrg(githubOrg);</span>
+<span class="fc" id="L286">        course.setName(name);</span>
+<span class="fc" id="L287">        course.setSchool(school);</span>
+<span class="fc" id="L288">        course.setTerm(term);</span>
+<span class="fc" id="L289">        course.setStartDate(startDate);</span>
+<span class="fc" id="L290">        course.setEndDate(endDate);</span>
+<span class="fc" id="L291">        course.setGithubOrg(githubOrg);</span>
         try {
-<span class="fc" id="L294">            GitHubAppOrg org = gitHubApp.org(githubOrg);</span>
-<span class="fc" id="L295">            course.setGithubAppInstallationId(Long.parseLong(org.instId));</span>
-<span class="fc" id="L296">        } catch (Exception e) {</span>
+<span class="fc" id="L293">            GitHubAppOrg org = gitHubApp.org(githubOrg);</span>
+<span class="fc" id="L294">            course.setGithubAppInstallationId(Long.parseLong(org.instId));</span>
+<span class="fc" id="L295">        } catch (Exception e) {</span>
             // Github App not installed
-<span class="fc" id="L298">            log.error(&quot;CAUGHT EXCEPTION \u001b[31m&quot; + e.toString() + &quot;\u001b[0m&quot;);</span>
-<span class="fc" id="L299">        }</span>
+<span class="fc" id="L297">            log.error(&quot;CAUGHT EXCEPTION \u001b[31m&quot; + e.toString() + &quot;\u001b[0m&quot;);</span>
+<span class="fc" id="L298">        }</span>
 
-<span class="fc" id="L301">        course = courseRepository.save(course);</span>
-<span class="fc" id="L302">        log.info(&quot;course={}&quot;, course);</span>
+<span class="fc" id="L300">        course = courseRepository.save(course);</span>
+<span class="fc" id="L301">        log.info(&quot;course={}&quot;, course);</span>
 
-<span class="fc" id="L304">        return course;</span>
+<span class="fc" id="L303">        return course;</span>
     }
 
     // delete a course if the user is an admin or instructor for the course
@@ -312,21 +311,21 @@ import java.util.Optional;
             @Parameter(name = &quot;id&quot;) @RequestParam Long id)
             throws JsonProcessingException {
 
-<span class="fc" id="L315">        Course course = courseRepository.findById(id)</span>
-<span class="fc" id="L316">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id.toString()));</span>
+<span class="fc" id="L314">        Course course = courseRepository.findById(id)</span>
+<span class="fc" id="L315">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id.toString()));</span>
 
         // Check if the current user is a staff member for this course or an admin. If
         // not, throw AccessDeniedException
 
-<span class="fc" id="L321">        User u = getCurrentUser().getUser();</span>
-<span class="fc bfc" id="L322" title="All 2 branches covered.">        if (!u.isAdmin()) {</span>
-<span class="fc" id="L323">            courseStaffRepository.findByCourseIdAndGithubId(course.getId(), u.getGithubId())</span>
-<span class="fc" id="L324">                    .orElseThrow(() -&gt; new AccessDeniedException(</span>
+<span class="fc" id="L320">        User u = getCurrentUser().getUser();</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">        if (!u.isAdmin()) {</span>
+<span class="fc" id="L322">            courseStaffRepository.findByCourseIdAndGithubId(course.getId(), u.getGithubId())</span>
+<span class="fc" id="L323">                    .orElseThrow(() -&gt; new AccessDeniedException(</span>
                             &quot;User is not a staff member for this course&quot;));
         }
 
-<span class="fc" id="L328">        courseRepository.delete(course);</span>
-<span class="fc" id="L329">        return course;</span>
+<span class="fc" id="L327">        courseRepository.delete(course);</span>
+<span class="fc" id="L328">        return course;</span>
     }
 
     @Operation(summary = &quot;Get a joinable info for a course&quot;)
@@ -334,10 +333,10 @@ import java.util.Optional;
     @GetMapping(&quot;/join&quot;)
     public Course joinById(
             @Parameter(name = &quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L337">        User u = getCurrentUser().getUser();</span>
+<span class="fc" id="L336">        User u = getCurrentUser().getUser();</span>
 
-<span class="fc" id="L339">        Course course = courseRepository.findById(id)</span>
-<span class="fc" id="L340">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id));</span>
+<span class="fc" id="L338">        Course course = courseRepository.findById(id)</span>
+<span class="fc" id="L339">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id));</span>
 
         // if (!u.isAdmin()) {
         // courseStaffRepository.findByCourseIdAndGithubId(id, u.getGithubId())
@@ -345,7 +344,7 @@ import java.util.Optional;
         // String.format(&quot;User %s is not authorized to get course %d&quot;,
         // u.getGithubLogin(), id)));
         // }
-<span class="fc" id="L348">        return course;</span>
+<span class="fc" id="L347">        return course;</span>
     }
 
     @Operation(summary = &quot;Join a course&quot;)
@@ -356,76 +355,74 @@ import java.util.Optional;
             throws JsonProcessingException {
         Course targetCourse;
 
-<span class="fc" id="L359">        Optional&lt;Course&gt; tempCourse = courseRepository.findById(courseId);</span>
-<span class="fc bfc" id="L360" title="All 2 branches covered.">        if (tempCourse.isPresent()) {</span>
-<span class="fc" id="L361">            targetCourse = tempCourse.get();</span>
+<span class="fc" id="L358">        Optional&lt;Course&gt; tempCourse = courseRepository.findById(courseId);</span>
+<span class="fc bfc" id="L359" title="All 2 branches covered.">        if (tempCourse.isPresent()) {</span>
+<span class="fc" id="L360">            targetCourse = tempCourse.get();</span>
         } else {
-<span class="fc" id="L363">            throw new EntityNotFoundException(Course.class, courseId);</span>
+<span class="fc" id="L362">            throw new EntityNotFoundException(Course.class, courseId);</span>
         }
-<span class="fc" id="L365">        User u = getCurrentUser().getUser();</span>
+<span class="fc" id="L364">        User u = getCurrentUser().getUser();</span>
 
-<span class="fc" id="L367">        log.warn(&quot;\u001B[33mUSER JOINING THE COURSE\u001B[0m&quot;);</span>
-<span class="fc" id="L368">        log.warn(&quot;\u001B[33m&quot; + u.getGithubLogin() + &quot;\u001B[0m&quot;);</span>
+<span class="fc" id="L366">        log.warn(&quot;\u001B[33mUSER JOINING THE COURSE\u001B[0m&quot;);</span>
+<span class="fc" id="L367">        log.warn(&quot;\u001B[33m&quot; + u.getGithubLogin() + &quot;\u001B[0m&quot;);</span>
         School s;
-<span class="fc" id="L370">        Optional&lt;School&gt; tempSchool = schoolRepository.findByName(targetCourse.getSchool());</span>
-<span class="fc bfc" id="L371" title="All 2 branches covered.">        if (tempSchool.isPresent()) {</span>
-<span class="fc" id="L372">            s = tempSchool.get();</span>
+<span class="fc" id="L369">        Optional&lt;School&gt; tempSchool = schoolRepository.findByName(targetCourse.getSchool());</span>
+<span class="fc bfc" id="L370" title="All 2 branches covered.">        if (tempSchool.isPresent()) {</span>
+<span class="fc" id="L371">            s = tempSchool.get();</span>
         } else {
-<span class="fc" id="L374">            throw new EntityNotFoundException(School.class, targetCourse.getSchool());</span>
+<span class="fc" id="L373">            throw new EntityNotFoundException(School.class, targetCourse.getSchool());</span>
         }
 
-<span class="fc" id="L377">        String emailSufix = s.getAbbrev() + &quot;.edu&quot;;</span>
+<span class="fc" id="L376">        String emailSufix = s.getAbbrev() + &quot;.edu&quot;;</span>
 
         // GitHubUserApi ghUser = new GitHubUserApi(accessToken);
         // log.warn(&quot;\u001B[33m&quot;+ghUser.userEmails().toString()+&quot;\u001B[0m&quot;);
 
-<span class="fc" id="L382">        ArrayList&lt;String&gt; emails = gitHubUserApi.userEmails();</span>
+<span class="fc" id="L381">        ArrayList&lt;String&gt; emails = gitHubUserApi.userEmails();</span>
 
-<span class="fc" id="L384">        boolean found = false;</span>
-<span class="fc" id="L385">        String schoolEmail = &quot;&quot;;</span>
-<span class="fc bfc" id="L386" title="All 2 branches covered.">        for (String email : emails) {</span>
-<span class="fc bfc" id="L387" title="All 2 branches covered.">            if (email.endsWith(emailSufix)) {</span>
-<span class="fc" id="L388">                found = true;</span>
-<span class="fc" id="L389">                schoolEmail = email;</span>
-<span class="fc" id="L390">                break;</span>
+<span class="fc" id="L383">        boolean found = false;</span>
+<span class="fc" id="L384">        String schoolEmail = &quot;&quot;;</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">        for (String email : emails) {</span>
+<span class="fc bfc" id="L386" title="All 2 branches covered.">            if (email.endsWith(emailSufix)) {</span>
+<span class="fc" id="L387">                found = true;</span>
+<span class="fc" id="L388">                schoolEmail = email;</span>
+<span class="fc" id="L389">                break;</span>
             }
-<span class="fc" id="L392">        }</span>
+<span class="fc" id="L391">        }</span>
 
-<span class="fc bfc" id="L394" title="All 2 branches covered.">        if (!found) {</span>
-<span class="fc" id="L395">            throw new AccessDeniedException(&quot;User does not have a school email&quot;);</span>
+<span class="fc bfc" id="L393" title="All 2 branches covered.">        if (!found) {</span>
+<span class="fc" id="L394">            throw new AccessDeniedException(&quot;User does not have a school email&quot;);</span>
         }
 
-<span class="fc" id="L398">        String netId = schoolEmail.split(&quot;@&quot;)[0];</span>
+        // String netId = schoolEmail.split(&quot;@&quot;)[0];
 
-<span class="fc" id="L400">        Student stu = studentRepository.findByCourseIdAndStudentId(courseId, netId)</span>
-<span class="fc" id="L401">                .orElse(null);</span>
+<span class="fc" id="L399">        Student stu = studentRepository.findByCourseIdAndEmail(courseId, schoolEmail)</span>
+<span class="fc" id="L400">                .orElse(null);</span>
 
-<span class="fc bfc" id="L403" title="All 2 branches covered.">        if (stu != null) {</span>
-<span class="fc" id="L404">            throw new AccessDeniedException(&quot;User is already in the course&quot;);</span>
+<span class="pc bpc" id="L402" title="1 of 2 branches missed.">        if (stu == null) {</span>
+<span class="nc" id="L403">            throw new AccessDeniedException(&quot;User is not in the roster&quot;);</span>
         }
 
+<span class="pc bpc" id="L406" title="1 of 4 branches missed.">        if(stu.getGithubId() != null &amp;&amp; stu.getGithubId() != 0) {</span>
+<span class="fc" id="L407">            throw new AccessDeniedException(&quot;User is already in the org&quot;);</span>
+        }
         // Check roster here
-
         // Send org Invitation
         try {
-<span class="fc" id="L411">            GitHubAppOrg org = gitHubApp.org(targetCourse.getGithubOrg());</span>
-<span class="fc" id="L412">            String res = org.inviteUserToThisOrg(u.getGithubId());</span>
-<span class="fc" id="L413">            log.info(&quot;\u001B[33m&quot; + res + &quot;\u001B[0m&quot;);</span>
-<span class="fc" id="L414">        } catch (Exception e) {</span>
-<span class="fc" id="L415">            log.error(e.toString());</span>
-<span class="fc" id="L416">            throw new AccessDeniedException(&quot;Failed to invite user to org. Is this user already in the org?&quot;);</span>
-<span class="fc" id="L417">        }</span>
+<span class="fc" id="L412">            GitHubAppOrg org = gitHubApp.org(targetCourse.getGithubOrg());</span>
+<span class="fc" id="L413">            String res = org.inviteUserToThisOrg(u.getGithubId());</span>
+<span class="fc" id="L414">            log.info(&quot;\u001B[33m&quot; + res + &quot;\u001B[0m&quot;);</span>
+<span class="fc" id="L415">        } catch (Exception e) {</span>
+<span class="fc" id="L416">            log.error(e.toString());</span>
+<span class="fc" id="L417">            throw new AccessDeniedException(&quot;Failed to invite user to org. Is this user already in the org?&quot;);</span>
+<span class="fc" id="L418">        }</span>
 
         // Store in db
-<span class="fc" id="L420">        Student student = Student.builder()</span>
-<span class="fc" id="L421">                .courseId(courseId)</span>
-<span class="fc" id="L422">                .studentId(netId)</span>
-<span class="fc" id="L423">                .email(schoolEmail)</span>
-<span class="fc" id="L424">                .githubId(u.getGithubId())</span>
-<span class="fc" id="L425">                .build();</span>
+<span class="fc" id="L421">        stu.setGithubId(u.getGithubId());</span>
+<span class="fc" id="L422">        stu.setUser(u);</span>
 
-<span class="fc" id="L427">        studentRepository.save(student);</span>
-<span class="fc" id="L428">        return GeneralOperationResp.builder().success(true).message(&quot;Joined Successfully&quot;).build();</span>
+<span class="fc" id="L424">        studentRepository.save(stu);</span>
+<span class="fc" id="L425">        return GeneralOperationResp.builder().success(true).message(&quot;Joined Successfully&quot;).build();</span>
     }
 
 }
