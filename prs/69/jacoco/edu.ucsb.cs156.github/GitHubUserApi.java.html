@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubUserApi.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">organic</a> &gt; <a href="index.source.html" class="el_package">edu.ucsb.cs156.github</a> &gt; <span class="el_source">GitHubUserApi.java</span></div><h1>GitHubUserApi.java</h1><pre class="source lang-java linenums">package edu.ucsb.cs156.github;
+
+import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class GitHubUserApi {
+    private GitHubToken token;
+    HttpClient client;
+
+<span class="fc" id="L14">    public GitHubUserApi(String ghToken) {</span>
+<span class="fc" id="L15">        token = new GitHubToken(ghToken);</span>
+<span class="fc" id="L16">        client = HttpClient.newHttpClient();</span>
+<span class="fc" id="L17">    }</span>
+
+<span class="fc" id="L19">    public GitHubUserApi(GitHubToken ghToken) {</span>
+<span class="fc" id="L20">        token = ghToken;</span>
+<span class="fc" id="L21">        client = HttpClient.newHttpClient();</span>
+<span class="fc" id="L22">    }</span>
+
+    public HttpResponse&lt;String&gt; get(String url)
+            throws GitHubAppException {
+<span class="fc" id="L26">        return Utils.get(url, token.getToken(), client);</span>
+    }
+
+    public HttpResponse&lt;String&gt; post(String url, JSONObject body)
+            throws GitHubAppException {
+<span class="fc" id="L31">        return Utils.post(url, body.toString(), token.getToken(), client);</span>
+
+    }
+
+    public HttpResponse&lt;String&gt; post(String url, String body)
+            throws GitHubAppException {
+<span class="fc" id="L37">        return Utils.post(url, body, token.getToken(), client);</span>
+    }
+
+    public ArrayList&lt;String&gt; userEmails() {
+<span class="fc" id="L41">        HttpResponse&lt;String&gt; response = get(&quot;/user/emails&quot;);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (response.statusCode() != 200) {</span>
+<span class="fc" id="L43">            throw new GitHubAppException(&quot;Failed to get user emails&quot;);</span>
+        }
+<span class="fc" id="L45">        JSONArray emails = new JSONArray(response.body());</span>
+<span class="fc" id="L46">        ArrayList&lt;String&gt; verifiedEmails = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        for (int i = 0; i &lt; emails.length(); i++) {</span>
+<span class="fc" id="L48">            JSONObject email = emails.getJSONObject(i);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            if (email.getBoolean(&quot;verified&quot;)) {</span>
+<span class="fc" id="L50">                verifiedEmails.add(email.getString(&quot;email&quot;));</span>
+            }
+        }
+<span class="fc" id="L53">        return verifiedEmails;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
