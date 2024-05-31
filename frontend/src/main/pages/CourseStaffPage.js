@@ -33,7 +33,7 @@ export default function CoursesStaffPage() {
       return (
         <BasicLayout>
           <div className="pt-2">
-            <h1>Staff for Course</h1>
+            <h1>Staff</h1>
             {
               <StaffTable staff={staff}/>
             }
