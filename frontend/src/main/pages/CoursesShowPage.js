@@ -66,7 +66,7 @@ export default function CourseShowPage() {
 
           <h2>Upload a course roster</h2>
           <input type="file" onChange={handleChange} aria-label="Upload File" data-testid="inputFile" />
-          <button onClick={handleUpload} style={{backgroundColor: 'white', color: 'black'}}>Upload Roster</button>
+          <button onClick={handleUpload} style={{backgroundColor: 'white', color: 'black'}} data-testid="uploadButton">Upload Roster</button>
         </div>
       </BasicLayout>
     )

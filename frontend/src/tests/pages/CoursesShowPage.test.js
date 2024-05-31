@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, waitFor, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import axios from "axios";
@@ -8,10 +8,12 @@ import CoursesShowPage from "main/pages/CoursesShowPage";
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 
+import userEvent from '@testing-library/user-event'
 
 
 
 import mockConsole from "jest-mock-console";
+import { toast } from "react-toastify";
 
 const mockToast = jest.fn();
 jest.mock('react-toastify', () => {
@@ -105,7 +107,7 @@ describe("CoursesShowPage tests", () => {
           );
       });
 
-      test("renders with data", () => {
+      test("renders with data",async () => {
         render(
             <QueryClientProvider client={queryClient}>
                 <MemoryRouter>
@@ -117,22 +119,8 @@ describe("CoursesShowPage tests", () => {
         expect(screen.getByText("UCSB")).toBeInTheDocument();
         expect(screen.getByText("f23")).toBeInTheDocument();
     });
-
-  });
-
-
-    describe("CoursesShowPage File Upload Tests", () => {
-
-        test("renders with data", async () => {
-            const axiosMock = new AxiosMockAdapter(axios);
-
-            beforeEach(() => {
-                axiosMock.reset();
-                axiosMock.resetHistory();
-                axiosMock.onGet("/api/courses/1").reply(200, systemInfoFixtures.showingNeither);
-            });
-
-            const queryClient = new QueryClient();
+        
+        test("renders with file upload", async () => {
             render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
@@ -140,11 +128,13 @@ describe("CoursesShowPage tests", () => {
                     </MemoryRouter>
                 </QueryClientProvider>
             );
-            const uploadFile = await screen.findByTestId("inputFile");
+            const input = screen.getByTestId("inputFile");
+            const file = new File(["(⌐□_□)"], "chucknorris.png", { type: "image/png" });
+            fireEvent.change(input, { target: { files: [file] } });
+            const uploadFileButton = screen.getByTestId("uploadButton");
+            userEvent.click(uploadFileButton);
         });
+
     });
-
-
-
 });
 
