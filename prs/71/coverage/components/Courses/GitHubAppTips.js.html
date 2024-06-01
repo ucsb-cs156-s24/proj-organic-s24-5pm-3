@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>5/8</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>5/8</span>
             </div>
         
             
@@ -134,8 +134,7 @@
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -160,32 +159,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -231,14 +229,15 @@ export default function GitHubAppTips({ githubStatus, org }) {
             &lt;/div&gt;
         );
 &nbsp;
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (githubStatus &amp;&amp; !(githubStatus.app))
-        return (&lt;div data-testid="CourseEdit-githubAppTips"&gt;
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (githubStatus &amp;&amp; !(githubStatus.name))
+<span class="cstat-no" title="statement not covered" >        return (&lt;div data-testid="CourseEdit-githubAppTips"&gt;</span>
             &lt;Card style={{ marginBottom: 20, marginTop: 20 }} data-testid="CourseEdit-GHAT-Card-Error"&gt;
                 &lt;Card.Body&gt;
                     &lt;Card.Title&gt;Warning: This app does not seem to be configured properly.&lt;/Card.Title&gt;
+                    &lt;p&gt;{JSON.stringify(githubStatus)}&lt;/p&gt;
                     &lt;ul&gt;
                         &lt;li&gt;
-                            The value of &lt;code&gt;githubStatus.app&lt;/code&gt; is "&lt;code&gt;{githubStatus.app}&lt;/code&gt;"
+                            The value of &lt;code&gt;githubStatus.name&lt;/code&gt; is "&lt;code&gt;{githubStatus.name}&lt;/code&gt;"
                         &lt;/li&gt;
                         &lt;li&gt;
                             The value of &lt;code&gt;app&lt;/code&gt; should not be blank; it should be the name of the GitHub App associcated
@@ -253,30 +252,28 @@ export default function GitHubAppTips({ githubStatus, org }) {
         &lt;/div&gt;
         );
 &nbsp;
+    const app = githubStatus.name;
 &nbsp;
-    // const app = githubStatus.name;
-    // console.log("GHATips: app=", app, "org=", org)
-&nbsp;
-    // return (&lt;div data-testid="CourseEdit-githubAppTips"&gt;
-    //     &lt;Card style={{ marginBottom: 20, marginTop: 20 }} data-testid="CourseEdit-GHAT-Card"&gt;
-    //         &lt;Card.Body&gt;
-    //             &lt;Card.Title&gt;Warning: Your organization does not seem to have our GitHub App installed&lt;/Card.Title&gt;
-    //             &lt;ul&gt;
-    //                 &lt;li&gt;
-    //                     After you click &lt;a href={"https://github.com/apps/" + app} target='_blank' data-testid="CourseEdit-GHAT-Link" rel="noopener noreferrer"&gt;this link&lt;/a&gt;, please install/configure and select your course organization to install it.
-    //                 &lt;/li&gt;
-    //                 &lt;li&gt;
-    //                     If you are successful you'll see the text "Okay, UCSB CS Linker was installed on the @{org}".
-    //                 &lt;/li&gt;
-    //                 &lt;li&gt;
-    //                     Then you can return to this app.
-    //                 &lt;/li&gt;
-    //             &lt;/ul&gt;
-    //             The GitHub App that needs to be installed is: {app}
-    //         &lt;/Card.Body&gt;
-    //     &lt;/Card&gt;
-    // &lt;/div&gt;
-    // );
+    return (&lt;div data-testid="CourseEdit-githubAppTips"&gt;
+        &lt;Card style={{ marginBottom: 20, marginTop: 20 }} data-testid="CourseEdit-GHAT-Card"&gt;
+            &lt;Card.Body&gt;
+                &lt;Card.Title&gt;Warning: Your organization does not seem to have our GitHub App installed&lt;/Card.Title&gt;
+                &lt;ul&gt;
+                    &lt;li&gt;
+                        After you click &lt;a href={"https://github.com/apps/" + app} target='_blank' data-testid="CourseEdit-GHAT-Link" rel="noopener noreferrer"&gt;this link&lt;/a&gt;, please install/configure and select your course organization to install it.
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                        If you are successful you'll see the text "Okay, UCSB CS Linker was installed on the @{org}".
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                        Then you can return to this app.
+                    &lt;/li&gt;
+                &lt;/ul&gt;
+                The GitHub App that needs to be installed is: {app}
+            &lt;/Card.Body&gt;
+        &lt;/Card&gt;
+    &lt;/div&gt;
+    );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return null;</span>
 }</pre></td></tr></table></pre>
@@ -286,7 +283,7 @@ export default function GitHubAppTips({ githubStatus, org }) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Sat Jun 01 2024 15:56:43 GMT-0700 (Pacific Daylight Time)
+                at Sat Jun 01 2024 16:01:12 GMT-0700 (Pacific Daylight Time)
             </div>
         <script src="../../prettify.js"></script>
         <script>
