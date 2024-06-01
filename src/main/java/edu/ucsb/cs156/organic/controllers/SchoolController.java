@@ -23,6 +23,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import javax.validation.Valid;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -116,12 +118,14 @@ public class SchoolController extends ApiController{
         @Parameter(name="termRegex", description="Format: Example [WSMF]\\d\\d") @RequestParam String termRegex,
         @Parameter(name="termDescription", description="Enter quarter, e.g. F23, W24, S24, M24") @RequestParam String termDescription,
         @Parameter(name="termError", description="input error?") @RequestParam String termError)
-        {
+        throws JsonProcessingException {
+
+        String decodedTermRegex = URLDecoder.decode(termRegex, StandardCharsets.UTF_8);
 
         School school = School.builder().build();
         school.setAbbrev(abbrev);
         school.setName(name);
-        school.setTermRegex(termRegex);
+        school.setTermRegex(decodedTermRegex);
         school.setTermDescription(termDescription);
         school.setTermError(termError);
 
