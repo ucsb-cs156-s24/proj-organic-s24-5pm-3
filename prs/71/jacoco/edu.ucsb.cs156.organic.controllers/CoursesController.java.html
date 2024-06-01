@@ -163,15 +163,15 @@ import java.util.Optional;
 <span class="fc" id="L163">        JSONObject appInfo = null;</span>
         try {
 <span class="fc" id="L165">            appInfo = gitHubApp.appInfo();</span>
-<span class="nc" id="L166">        } catch (Exception e) {</span>
-<span class="nc" id="L167">            log.error(&quot;EXCEPTION: &quot;, e);</span>
-<span class="nc" id="L168">            return OrgStatus.builder()</span>
-<span class="nc" id="L169">                    .org(githubOrg)</span>
-<span class="nc" id="L170">                    .githubAppInstalled(false)</span>
-<span class="nc" id="L171">                    .name(&quot;&quot;)</span>
-<span class="nc" id="L172">                    .exceptionThrown(true)</span>
-<span class="nc" id="L173">                    .exceptionMessage(e.toString())</span>
-<span class="nc" id="L174">                    .build();</span>
+<span class="fc" id="L166">        } catch (Exception e) {</span>
+<span class="fc" id="L167">            log.error(&quot;EXCEPTION: &quot;, e);</span>
+<span class="fc" id="L168">            return OrgStatus.builder()</span>
+<span class="fc" id="L169">                    .org(githubOrg)</span>
+<span class="fc" id="L170">                    .githubAppInstalled(false)</span>
+<span class="fc" id="L171">                    .name(&quot;&quot;)</span>
+<span class="fc" id="L172">                    .exceptionThrown(true)</span>
+<span class="fc" id="L173">                    .exceptionMessage(e.toString())</span>
+<span class="fc" id="L174">                    .build();</span>
 <span class="fc" id="L175">        }</span>
 
 <span class="fc" id="L177">        log.info(&quot;****************************************&quot;);</span>
