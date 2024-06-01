@@ -22,26 +22,31 @@ public class GitHubApp {
     public GitHubAppOrg org(String org) throws GitHubAppException {
 <span class="fc" id="L23">        HttpResponse&lt;String&gt; resp = get(&quot;/orgs/&quot; + org + &quot;/installation&quot;);</span>
 <span class="fc bfc" id="L24" title="All 2 branches covered.">        if (resp.statusCode() != 200) {</span>
-<span class="fc" id="L25">            throw new GitHubAppException(&quot;Organization not found&quot;);</span>
+<span class="fc" id="L25">            String responseBody = resp.body();</span>
+<span class="fc" id="L26">            String message = String.format(&quot;&quot;&quot;</span>
+                    Error getting installation for org %s: %s
+                    Status Code: %d
+<span class="fc" id="L29">                    &quot;&quot;&quot;, org, responseBody, resp.statusCode());        </span>
+<span class="fc" id="L30">            throw new GitHubAppException(message);</span>
         }
-<span class="fc" id="L27">        JSONObject json = new JSONObject(resp.body());</span>
-<span class="fc" id="L28">        return new GitHubAppOrg(this, org, json.getInt(&quot;id&quot;) + &quot;&quot;);</span>
+<span class="fc" id="L32">        JSONObject json = new JSONObject(resp.body());</span>
+<span class="fc" id="L33">        return new GitHubAppOrg(this, org, json.getInt(&quot;id&quot;) + &quot;&quot;);</span>
     }
 
     public HttpResponse&lt;String&gt; get(String url)
             throws GitHubAppException {
-<span class="fc" id="L33">        return Utils.get(url, jwtProvider.getJwt(), client);</span>
+<span class="fc" id="L38">        return Utils.get(url, jwtProvider.getJwt(), client);</span>
     }
 
     public HttpResponse&lt;String&gt; post(String url, JSONObject body)
             throws GitHubAppException {
-<span class="fc" id="L38">        return Utils.post(url, body.toString(), jwtProvider.getJwt(), client);</span>
+<span class="fc" id="L43">        return Utils.post(url, body.toString(), jwtProvider.getJwt(), client);</span>
 
     }
 
     public HttpResponse&lt;String&gt; post(String url, String body)
             throws GitHubAppException {
-<span class="fc" id="L44">        return Utils.post(url, body, jwtProvider.getJwt(), client);</span>
+<span class="fc" id="L49">        return Utils.post(url, body, jwtProvider.getJwt(), client);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
