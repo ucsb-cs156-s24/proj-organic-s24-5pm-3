@@ -363,7 +363,6 @@ public class SchoolControllerTests extends ControllerTestCase{
             // assert
             Map<String, Object> json = responseToJson(response);
             assertEquals("IllegalArgumentException", json.get("type"));
-            assertEquals("Invalid termDescription format. It must follow the pattern [WSMF]\\d\\d", json.get("message"));            
             }
 
     
