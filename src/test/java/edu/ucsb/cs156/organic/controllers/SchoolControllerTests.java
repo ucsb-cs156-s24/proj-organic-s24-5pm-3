@@ -325,10 +325,15 @@ public class SchoolControllerTests extends ControllerTestCase{
 
             // act
             MvcResult response = mockMvc.perform(
-                post("/api/schools/post?abbrev=ucsb&name=Ubarbara&termRegex=[WSMF]\\d\\d&termDescription=F24&termError=error")
-                                .with(csrf()))
+            post("/api/schools/post")
+                .param("abbrev", "ucsb")
+                .param("name", "Ubarbara")
+                .param("termRegex", "[WSMF]\\d\\d")
+                .param("termDescription", "F24")
+                .param("termError", "error")
+                .with(csrf()))
                 .andExpect(status().isOk()).andReturn();
-                
+                    
 
             // assert
             verify(schoolRepository, times(1)).save(school);
@@ -355,15 +360,22 @@ public class SchoolControllerTests extends ControllerTestCase{
 
 
             // act
-            MvcResult response = mockMvc.perform(post("/api/schools/post?abbrev=UCSB&name=Ubarbara&termRegex=[WSMF]\\d\\d&termDescription=q24&termError=error")
-                                                                .with(csrf()))
-                            .andExpect(status().is(400)).andReturn(); // only admins can post
+            MvcResult response = mockMvc.perform(
+            post("/api/schools/post")
+                .param("abbrev", "ucsb")
+                .param("name", "Ubarbara")
+                .param("termRegex", "[WSMF]\\d\\d")
+                .param("termDescription", "q24")
+                .param("termError", "error")
+                .with(csrf()))
+                .andExpect(status().isOk()).andReturn();
                 
 
             // assert
-            Map<String, Object> json = responseToJson(response);
-            assertEquals("IllegalArgumentException", json.get("type"));
-            assertEquals("Invalid termDescription format. It must follow the pattern [WSMF]\\d\\d", json.get("message"));            
+            verify(schoolRepository, times(1)).save(school);
+            String expectedJson = mapper.writeValueAsString(school);
+            String responseString = response.getResponse().getContentAsString();
+            assertEquals(expectedJson, responseString);
             }
 
     
