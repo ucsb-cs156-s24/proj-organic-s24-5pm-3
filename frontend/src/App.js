@@ -12,9 +12,13 @@ import CoursesEditPage from "main/pages/CoursesEditPage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
 import AdminJobsPage from "main/pages/AdminJobsPage";
 import SchoolIndexPage from "main/pages/SchoolIndexPage";
+import SchoolEditPage from "main/pages/SchoolEditPage";
 
 import CoursesCreatePage from "main/pages/CoursesCreatePage";
 import CourseIndexPage from "main/pages/CourseIndexPage";
+
+import CoursesShowPage from "main/pages/CoursesShowPage";
+import CoursesStaffPage from "main/pages/CoursesStaffPage";
 
 
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
@@ -26,6 +30,7 @@ function App() {
   const adminRoutes = hasRole(currentUser, "ROLE_ADMIN") ? (
     <>
       <Route path="/admin/schools" element={<SchoolIndexPage />} />
+      <Route path="/admin/schools/edit/:abbrev" element={<SchoolEditPage />} />
       <Route path="/admin/users" element={<AdminUsersPage />} />
       <Route path="/admin/jobs" element={<AdminJobsPage />} />
     </>
@@ -43,6 +48,14 @@ function App() {
       <Route path="/courses/create" element={<CoursesCreatePage />} />
       <Route path="/courses" element={<CourseIndexPage />} />
       <Route path="/courses/edit/:id" element={<CoursesEditPage />} />
+      <Route path="/courses/:id" element={<CoursesShowPage />} />
+
+    </>
+  ) : null;
+
+  const staffRoutes = (hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_INSTRUCTOR") || hasRole(currentUser, "Role_USER")) ? (
+    <>
+      <Route path="/courses/:id/staff" element={<CoursesStaffPage />} />
     </>
   ) : null;
 
@@ -85,6 +98,7 @@ function App() {
           {adminRoutes}
           {userRoutes}
           {courseRoutes}
+          {staffRoutes}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       )}
