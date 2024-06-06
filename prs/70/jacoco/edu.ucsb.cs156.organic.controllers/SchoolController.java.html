@@ -112,7 +112,7 @@ import edu.ucsb.cs156.organic.repositories.UserRepository;
         @Parameter(name=&quot;name&quot;, description=&quot;University name&quot;) @RequestParam String name,
         @Parameter(name=&quot;termRegex&quot;, description=&quot;Format: Example [WSMF]\\d\\d&quot;) @RequestParam String termRegex,
         @Parameter(name=&quot;termDescription&quot;, description=&quot;Enter quarter, e.g. F23, W24, S24, M24&quot;) @RequestParam String termDescription,
-        @Parameter(name=&quot;termError&quot;, description=&quot;input error?&quot;) @RequestParam String termError)
+        @Parameter(name=&quot;termError&quot;, description=&quot;input error?&quot;) @RequestParam(required = false) String termError)
         throws JsonProcessingException {
 
 <span class="fc" id="L118">        String decodedTermRegex = URLDecoder.decode(termRegex, StandardCharsets.UTF_8);</span>
