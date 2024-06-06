@@ -15,12 +15,12 @@ public class JwtProviderBean {
     @Value("${spring.security.oauth2.client.registration.github.client-secret}")
     private String clientSecret;
 
-    @Value("${edu.ucsb.cs156.github.pkfile}")
-    private String clientPkPath;
+    @Value("${edu.ucsb.cs156.github.privateKeyPEM:NO-KEY-PROVIDED}")
+    private String privateKeyPEM;
 
     @Bean
     public JwtProvider jwtProvider() {
-        return new JwtProvider(this.clientId, this.clientPkPath);
+        return new JwtProvider(this.clientId, this.privateKeyPEM);
     }
 
 }

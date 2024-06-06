@@ -2,20 +2,20 @@ package edu.ucsb.cs156.github;
 
 public class JwtProvider {
     private String appId;
-    private String keyFile;
+    private String privateKeyPEM;
 
     private String jwt;
     private long jwtCreatedAt;
 
-    public JwtProvider(String appId, String keyFile) {
+    public JwtProvider(String appId, String privateKeyPEM) {
         this.appId = appId;
-        this.keyFile = keyFile;
+        this.privateKeyPEM = privateKeyPEM;
     }
 
     private void checkJwtExpiration() {
         if (jwt == null || System.currentTimeMillis() - jwtCreatedAt > 600000) {
             try {
-                jwt = Utils.createJWT(appId, 600000, keyFile);
+                jwt = Utils.createJWT(appId, 600000, privateKeyPEM);
                 jwtCreatedAt = System.currentTimeMillis();
             } catch (Exception e) {
                 e.printStackTrace();
