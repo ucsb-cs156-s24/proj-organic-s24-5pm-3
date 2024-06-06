@@ -17,7 +17,10 @@ import SchoolCreatePage from "main/pages/SchoolCreatePage";
 
 import CoursesCreatePage from "main/pages/CoursesCreatePage";
 import CourseIndexPage from "main/pages/CourseIndexPage";
+
+import CoursesShowPage from "main/pages/CoursesShowPage";
 import CoursesStaffPage from "main/pages/CoursesStaffPage";
+
 
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
 import NotFoundPage from "main/pages/NotFoundPage";
