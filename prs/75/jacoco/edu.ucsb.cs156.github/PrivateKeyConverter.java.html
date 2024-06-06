@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrivateKeyConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">organic</a> &gt; <a href="index.source.html" class="el_package">edu.ucsb.cs156.github</a> &gt; <span class="el_source">PrivateKeyConverter.java</span></div><h1>PrivateKeyConverter.java</h1><pre class="source lang-java linenums">package edu.ucsb.cs156.github;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+
+import java.security.PrivateKey;
+import java.security.Security;
+import java.security.KeyFactory;
+import java.security.spec.PKCS8EncodedKeySpec;
+
+import java.util.Base64;
+
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+
+<span class="nc" id="L16">public class PrivateKeyConverter {</span>
+
+    /**
+     * Convert a private key from the PEM format you can download when you create
+     * a Github app (the one that starts with &lt;code&gt;-----BEGIN RSA PRIVATE KEY-----
+    &lt;/code&gt;) into a PrivateKey object.
+     * 
+     * @param privateKeyString
+     * @return a PrivateKey object
+     */
+
+    public static PrivateKey convertToPrivateKey(String privateKeyString) throws Exception {
+        // Make sure Bouncy Castle provider is registered
+<span class="nc" id="L29">        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());</span>
+
+        try {
+
+            // Remove the BEGIN and END lines, and newline characters
+<span class="nc" id="L34">            String privateKeyPEMTrimmed = privateKeyString</span>
+<span class="nc" id="L35">                    .replace(&quot;-----BEGIN RSA PRIVATE KEY-----&quot;, &quot;&quot;)</span>
+<span class="nc" id="L36">                    .replace(&quot;-----END RSA PRIVATE KEY-----&quot;, &quot;&quot;)</span>
+<span class="nc" id="L37">                    .replaceAll(&quot;\\s+&quot;, &quot;&quot;);</span>
+
+            // Decode Base64 and convert to byte array
+<span class="nc" id="L40">            byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyPEMTrimmed);</span>
+
+
+            // Parse the ASN.1 encoded private key
+<span class="nc" id="L44">            ByteArrayInputStream bis = new ByteArrayInputStream(privateKeyBytes);</span>
+<span class="nc" id="L45">            PEMParser pemParser = new PEMParser(new InputStreamReader(bis));</span>
+<span class="nc" id="L46">            Object obj = pemParser.readObject();</span>
+<span class="nc" id="L47">            pemParser.close();</span>
+<span class="nc" id="L48">            bis.close();</span>
+
+<span class="nc bnc" id="L50" title="All 2 branches missed.">            if (obj instanceof PrivateKeyInfo) {</span>
+<span class="nc" id="L51">                PrivateKeyInfo pki = (PrivateKeyInfo) obj;</span>
+
+                // Initialize a KeyFactory with the Bouncy Castle provider
+<span class="nc" id="L54">                KeyFactory kf = KeyFactory.getInstance(&quot;RSA&quot;, &quot;BC&quot;);</span>
+
+                // Generate the PrivateKey object
+<span class="nc" id="L57">                PrivateKey privateKey = kf.generatePrivate(new PKCS8EncodedKeySpec(pki.getEncoded()));</span>
+
+                // Use the PrivateKey object as needed
+<span class="nc" id="L60">                System.out.println(&quot;Private key: &quot; + privateKey);</span>
+<span class="nc" id="L61">                return privateKey;</span>
+            } else {
+<span class="nc" id="L63">                return null;</span>
+            }
+
+<span class="nc" id="L66">        } catch (Exception e) {</span>
+<span class="nc" id="L67">            e.printStackTrace();</span>
+<span class="nc" id="L68">            throw e;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
