@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s24/proj-organic-s24-5pm-3
 owner: ucsb-cs156-s24
 repo_name: proj-organic-s24-5pm-3
-pull_requests: [{"author":{"id":"MDQ6VXNlcjExMTkwMTc=","is_bot":false,"login":"pconrad","name":"Phill Conrad"},"headRefName":"pc-easierKeyHandling","number":76,"title":"pc - spike of handling private keys through environment variables instead of through files","url":"https://github.com/ucsb-cs156-s24/proj-organic-s24-5pm-3/pull/76"},{"author":{"id":"MDQ6VXNlcjExMTkwMTc=","is_bot":false,"login":"pconrad","name":"Phill Conrad"},"headRefName":"pc-easierKeyHandling","number":75,"title":"Pc easier key handling","url":"https://github.com/ucsb-cs156-s24/proj-organic-s24-5pm-3/pull/75"},{"author":{"id":"MDQ6VXNlcjQzNzgzODc3","is_bot":false,"login":"yuxiaolejs","name":"Unics Yu"},"headRefName":"Tianle-deployScript","number":62,"title":"[tool] A tool for configuring dokku app quickly","url":"https://github.com/ucsb-cs156-s24/proj-organic-s24-5pm-3/pull/62"}]
+pull_requests: []
